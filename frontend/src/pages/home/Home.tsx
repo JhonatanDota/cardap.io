@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import FeatureHighlight from "./components/FeatureHighlight";
 
 import HamburguerIcon from "./icons/HamburguerIcon";
@@ -7,8 +8,12 @@ import CupCakeIcon from "./icons/CupCakeIcon";
 
 export default function Home() {
   return (
-    <div className="md:w-3/4 md:m-auto flex flex-col justify-center items-center gap-5 md:gap-8 m-10 font-nunito-sans">
-      <img src="/images/logos/CardapioBlackLogo.svg" alt="Cardap.io" />
+    <div className="md:w-2/3 md:m-auto flex flex-col justify-center items-center gap-5 md:gap-8 m-10 font-nunito-sans">
+      <img
+        className="w-2/3 md:w-1/2"
+        src="/images/logos/CardapioLogoBlack.svg"
+        alt="Cardap.io"
+      />
 
       <h3 className="text-lg md:text-4xl font-bold text-orange-600 text-center my-5">
         Crie e personalize seu Cardap.io de forma descomplicada e rápida.
@@ -40,9 +45,11 @@ export default function Home() {
         />
       </div>
 
-      <button className="text-base md:text-lg p-4 md:p-6 rounded-md font-extrabold uppercase bg-yellow-400">
-        Quero Criar o MEU!
-      </button>
+      <Link to="/login">
+        <button className="text-base md:text-lg p-4 md:p-6 rounded-md font-extrabold uppercase bg-yellow-400">
+          Quero Criar o MEU!
+        </button>
+      </Link>
     </div>
   );
 }
