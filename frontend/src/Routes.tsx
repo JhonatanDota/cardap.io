@@ -2,7 +2,7 @@ import { Route, Routes as RouterDomRoutes } from "react-router-dom";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/authentication/login/Login";
-import Cardapio from "./pages/client/Cardapio";
+import Cardapio from "./pages/client/cardapio/Cardapio";
 
 export default function Routes() {
   return (
@@ -10,7 +10,7 @@ export default function Routes() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
 
-      <Route path="cardapios/:slug" element={<Cardapio />} />
+      <Route path="menus/:slug" element={<Cardapio />} />
     </RouterDomRoutes>
   );
 }

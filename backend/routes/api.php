@@ -20,5 +20,5 @@ use App\Http\Controllers\CompanyController;
 // =========================================================================
 
 Route::prefix('companies')->group(function () {
-    Route::get('/{slug}', [CompanyController::class, 'show']);
+    Route::get('/{slug}', [CompanyController::class, 'retrieve']);
 });
