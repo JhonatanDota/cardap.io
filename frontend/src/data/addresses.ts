@@ -7,6 +7,7 @@ export const ADDRESS_1: AddressModel = {
   city: "New York",
   postalCode: "10001",
   state: "NY",
+  complement: null,
 };
 
 export const ADDRESS_2: AddressModel = {
@@ -26,4 +27,5 @@ export const ADDRESS_3: AddressModel = {
   city: "San Francisco",
   postalCode: "94101",
   state: "CA",
+  complement: null,
 };
