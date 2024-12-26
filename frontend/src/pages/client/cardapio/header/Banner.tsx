@@ -7,7 +7,7 @@ export default function Banner(props: BannerProps) {
 
   return (
     <div
-      className="w-full h-36 bg-cover rounded-b-lg shadow-md"
+      className="w-full h-36 md:h-52 bg-cover rounded-b-lg shadow-md"
       style={{
         backgroundImage: `url(${
           imageUrl ?? "/images/logos/CardapioLogoBlack.svg"

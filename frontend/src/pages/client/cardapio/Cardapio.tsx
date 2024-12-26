@@ -20,7 +20,7 @@ export default function Cardapio() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full md:w-1/2 md:m-auto">
       <CardapioHeader company={COMPANY_1} address={ADDRESS_1} />
       <CardapioDetails
         paymentMethods={PAYMENT_METHODS_1}

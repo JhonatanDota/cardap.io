@@ -6,5 +6,9 @@ interface AddressProps {
 export default function Address(props: AddressProps) {
   const { address } = props;
 
-  return <p className="p-3 text-sm text-center">{addressFormatter(address)}</p>;
+  return (
+    <p className="p-2 text-sm md:text-lg text-center">
+      {addressFormatter(address)}
+    </p>
+  );
 }

@@ -22,17 +22,22 @@ export default function PaymentMethod(props: PaymentMethodProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <h3 className="uppercase text-base font-medium">Formas de Pagamento</h3>
+    <div className="flex flex-col items-center gap-1 md:gap-3">
+      <h3 className="uppercase text-base md:text-xl font-medium">
+        Formas de Pagamento
+      </h3>
 
-      <div className="grid grid-cols-2 gap-y-2 justify-items-center">
+      <div className="grid grid-cols-2 gap-y-2">
         {paymentMethods.map((paymentMethod, index) => (
-          <div className="flex flex-row items-center gap-2" key={index}>
-            <svg className="w-8 h-8">
+          <div
+            className="flex flex-row items-center gap-2 md:gap-3"
+            key={index}
+          >
+            <svg className="w-8 md:w-10 h-8 md:h-10">
               {paymentMethodIconsMap[paymentMethod]}
             </svg>
 
-            <span className="text-sm font-medium">
+            <span className="text-sm md:text-lg font-medium">
               {PaymentMethodReadableEnum[paymentMethod]}
             </span>
           </div>

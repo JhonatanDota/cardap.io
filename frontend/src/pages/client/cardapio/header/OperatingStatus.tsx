@@ -17,7 +17,7 @@ export default function OperatingStatus(props: OperatingStatusProps) {
 
   return (
     <h1
-      className={`uppercase text-lg font-medium text-center ${operationStatusColorClassMap[operatingStatus]}`}
+      className={`uppercase text-lg md:text-2xl font-medium text-center ${operationStatusColorClassMap[operatingStatus]}`}
     >
       {CompanyOperatingStatusReadableEnum[operatingStatus]}
     </h1>
