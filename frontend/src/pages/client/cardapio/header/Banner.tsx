@@ -1,5 +1,5 @@
 interface BannerProps {
-  imageUrl?: string;
+  imageUrl: string | null;
 }
 
 export default function Banner(props: BannerProps) {

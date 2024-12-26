@@ -1,3 +1,6 @@
+import { COMPANY_1 } from "../../../data/companies";
+import { ADDRESS_1 } from "../../../data/addresses";
+
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -15,7 +18,7 @@ export default function Cardapio() {
 
   return (
     <div className="flex flex-col">
-      <CardapioHeader />
+      <CardapioHeader company={COMPANY_1} address={ADDRESS_1}/>
       <CardapioItems />
       <CardapioFooter />
     </div>

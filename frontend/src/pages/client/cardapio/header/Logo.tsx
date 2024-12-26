@@ -1,5 +1,5 @@
 interface LogoProps {
-  imageUrl?: string;
+  imageUrl: string | null;
 }
 
 export default function Logo(props: LogoProps) {

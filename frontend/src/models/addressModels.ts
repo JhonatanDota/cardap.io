@@ -7,3 +7,4 @@ export type AddressModel = {
   postalCode: string;
   state: string;
 };
+
