@@ -4,8 +4,19 @@ export const MENU_ITEM_1: MenuItemModel = {
   id: 1,
   name: "Cheese Burguer",
   price: 28.99,
-  ingredients: ["Queijo", "Tomate", "Carne"],
-  description: "Saboroso e em conta.",
+  ingredients: [
+    "Queijo",
+    "Tomate",
+    "Carne",
+    "Alface",
+    "Barbecue",
+    "Maionese",
+    "Pão Brioche",
+    "Ervilha",
+    "Milho",
+  ],
+  description:
+    "Ingredientes selecionados para um Burguer maravilhoso e saboroso!.",
   image: null,
   available: true,
 };
