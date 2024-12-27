@@ -2,13 +2,14 @@ import { COMPANY_1 } from "../../../data/companies";
 import { ADDRESS_1 } from "../../../data/addresses";
 import { PAYMENT_METHODS_1 } from "../../../data/paymentMethods";
 import { OPENING_HOURS_1 } from "../../../data/openingHours";
+import { MENU_1 } from "../../../data/menus";
 
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import CardapioHeader from "./header/CardapioHeader";
 import CardapioDetails from "./details/CardapioDetails";
-import CardapioItems from "./CardapioItems";
+import CardapioMenu from "./menu/CardapioMenu";
 import CardapioFooter from "./CardapioFooter";
 
 export default function Cardapio() {
@@ -26,7 +27,7 @@ export default function Cardapio() {
         paymentMethods={PAYMENT_METHODS_1}
         openingHours={OPENING_HOURS_1}
       />
-      <CardapioItems />
+      <CardapioMenu menu={MENU_1} />
       <CardapioFooter />
     </div>
   );

@@ -1,6 +1,7 @@
 import { AddressModel } from "../models/addressModels";
 
 export const ADDRESS_1: AddressModel = {
+  id: 1,
   street: "123 Main Street",
   number: "101",
   neighborhood: "Downtown",
@@ -11,6 +12,7 @@ export const ADDRESS_1: AddressModel = {
 };
 
 export const ADDRESS_2: AddressModel = {
+  id: 2,
   street: "456 Oak Avenue",
   number: "205B",
   complement: "Apt 3C",
@@ -21,6 +23,7 @@ export const ADDRESS_2: AddressModel = {
 };
 
 export const ADDRESS_3: AddressModel = {
+  id: 3,
   street: "789 Pine Road",
   number: "32",
   neighborhood: "Sunnyvale",

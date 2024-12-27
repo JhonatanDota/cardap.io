@@ -8,7 +8,7 @@ export default function Logo(props: LogoProps) {
   return (
     <img
       className="m-auto w-24 md:w-32 -mt-12 md:-mt-16 rounded-md shadow-lg"
-      src={imageUrl ?? "/images/logos/CardapioMinifiedLogoBlack.svg"}
+      src={imageUrl ?? "/images/logos/CardapioMinifiedLogoBlack.svg"} //TODO: Mover para fallback images
       alt="logo"
     />
   );

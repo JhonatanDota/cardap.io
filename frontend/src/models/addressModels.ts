@@ -1,4 +1,5 @@
 export type AddressModel = {
+  id: number;
   street: string;
   number: string;
   complement: string | null;

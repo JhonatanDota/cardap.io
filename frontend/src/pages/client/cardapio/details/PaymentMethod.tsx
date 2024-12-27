@@ -37,7 +37,7 @@ export default function PaymentMethod(props: PaymentMethodProps) {
               {paymentMethodIconsMap[paymentMethod]}
             </svg>
 
-            <span className="text-sm md:text-lg font-medium">
+            <span className="text-sm md:text-lg">
               {PaymentMethodReadableEnum[paymentMethod]}
             </span>
           </div>
