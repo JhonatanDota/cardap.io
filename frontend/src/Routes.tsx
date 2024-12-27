@@ -2,6 +2,10 @@ import { Route, Routes as RouterDomRoutes } from "react-router-dom";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/authentication/login/Login";
+
+import AdminLayout from "./pages/admin/home/layout/AdminLayout";
+import AdminHome from "./pages/admin/home/AdminHome";
+
 import Cardapio from "./pages/client/cardapio/Cardapio";
 
 export default function Routes() {
@@ -10,7 +14,11 @@ export default function Routes() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
 
-      <Route path="menus/:slug" element={<Cardapio />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminHome />} />
+      </Route>
+
+      <Route path="/menus/:slug" element={<Cardapio />} />
     </RouterDomRoutes>
   );
 }
