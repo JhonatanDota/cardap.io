@@ -16,7 +16,7 @@ export default function AdminMenuItems(props: AdminMenuItemsProps) {
     <div className="flex flex-col w-full mt-3 border-t-2 border-gray-700 overflow-hidden">
       <Link to={"/"}>
         <AdminMenuItem
-          name="Dashboard"
+          name="Home"
           icon={<HomeIcon />}
           isExpanded={isMenuExpanded}
         />
