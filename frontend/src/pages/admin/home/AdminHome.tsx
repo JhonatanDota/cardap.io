@@ -1,3 +1,3 @@
 export default function AdminHome() {
-  return <h1>re</h1>;
+  return <h1>Admin Home</h1>;
 }
