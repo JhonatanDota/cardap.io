@@ -13,7 +13,7 @@ export default function AdminMenuItems(props: AdminMenuItemsProps) {
   const { isMenuExpanded } = props;
 
   return (
-    <div className="flex flex-col w-full mt-3 border-t-2 border-gray-700 overflow-hidden">
+    <div className="flex flex-col w-full mt-2 border-t-2 md:border-t-4 border-gray-700 overflow-hidden">
       <Link to={"/"}>
         <AdminMenuItem
           name="Home"
