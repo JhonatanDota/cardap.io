@@ -6,7 +6,7 @@ import Login from "./pages/authentication/login/Login";
 import AdminLayout from "./pages/admin/layout/AdminLayout";
 import AdminHome from "./pages/admin/home/AdminHome";
 import AdminCompany from "./pages/admin/company/AdminCompany";
-import AdminMenu from "./pages/admin/menu/AdminMenu";
+import AdminCardapio from "./pages/admin/cardapio/AdminCardapio";
 import AdminMetrics from "./pages/admin/metrics/AdminMetrics";
 
 import Cardapio from "./pages/client/cardapio/Cardapio";
@@ -19,7 +19,7 @@ export default function Routes() {
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminHome />} />
-        <Route path="menu" element={<AdminMenu />} />
+        <Route path="menu" element={<AdminCardapio />} />
         <Route path="metrics" element={<AdminMetrics />} />
       </Route>
 

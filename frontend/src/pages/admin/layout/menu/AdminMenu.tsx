@@ -7,7 +7,7 @@ export default function AdminMenu() {
 
   return (
     <div
-      className={`flex ${
+      className={`h-screen sticky top-0 flex ${
         isExpanded ? "w-32 md:w-44" : "w-16 md:w-24"
       } bg-gray-900 rounded-r-md transition-all duration-300`}
     >

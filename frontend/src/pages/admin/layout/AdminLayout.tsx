@@ -4,7 +4,7 @@ import AdminMenu from "./menu/AdminMenu";
 
 export default function AdminLayout() {
   return (
-    <div>
+    <div className="flex">
       <AdminMenu />
       <main>
         <Outlet />
