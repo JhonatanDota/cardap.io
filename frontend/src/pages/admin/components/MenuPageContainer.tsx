@@ -5,5 +5,5 @@ interface MenuPageContainerProps {
 export default function MenuPageContainer(props: MenuPageContainerProps) {
   const { children } = props;
 
-  return <section className="p-4">{children}</section>;
+  return <section className="p-2">{children}</section>;
 }

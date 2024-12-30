@@ -4,9 +4,10 @@ import AdminMenu from "./menu/AdminMenu";
 
 export default function AdminLayout() {
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <AdminMenu />
-      <main>
+
+      <main className="grow">
         <Outlet />
       </main>
     </div>
