@@ -19,6 +19,7 @@ export default function Routes() {
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminHome />} />
+        <Route path="company" element={<AdminCompany />} />
         <Route path="menu" element={<AdminCardapio />} />
         <Route path="metrics" element={<AdminMetrics />} />
       </Route>

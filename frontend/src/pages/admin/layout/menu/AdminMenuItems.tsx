@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import AdminMenuItem from "./AdminMenuItem";
 import HomeIcon from "../../../../icons/HomeIcon";
+import CompanyIcon from "../../../../icons/CompanyIcon";
 import MetricsIcon from "../../../../icons/MetricsIcon";
 import CardapioIcon from "../../../../icons/CardapioIcon";
 
@@ -17,6 +18,14 @@ export default function AdminMenuItems(props: AdminMenuItemsProps) {
         <AdminMenuItem
           name="Home"
           icon={<HomeIcon />}
+          isExpanded={isMenuExpanded}
+        />
+      </NavLink>
+
+      <NavLink to={"/admin/company"}>
+        <AdminMenuItem
+          name="Empresa"
+          icon={<CompanyIcon />}
           isExpanded={isMenuExpanded}
         />
       </NavLink>
