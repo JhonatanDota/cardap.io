@@ -4,6 +4,8 @@ interface MenuPageSectionTitleProps {
 
 export default function MenuPageSectionTitle(props: MenuPageSectionTitleProps) {
   const { title } = props;
-  
-  return <h1>{title}</h1>;
+
+  return (
+    <h2 className="uppercase text-lg font-medium text-gray-800">{title}</h2>
+  );
 }

@@ -7,7 +7,7 @@ export default function AdminLayout() {
     <div className="flex w-full">
       <AdminMenu />
 
-      <main className="grow">
+      <main className="grow overflow-auto">
         <Outlet />
       </main>
     </div>

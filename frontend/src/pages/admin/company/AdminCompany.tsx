@@ -1,4 +1,4 @@
-import { COMPANY_2 } from "../../../data/companies";
+import { COMPANY_1 } from "../../../data/companies";
 import { ADDRESS_1 } from "../../../data/addresses";
 
 import MenuPageContainer from "../components/MenuPageContainer";
@@ -16,7 +16,7 @@ export default function AdminCompany() {
       <div className="flex flex-col">
         <div>
           <MenuPageSectionTitle title="Detalhes" />
-          <AdminCompanyDetails company={COMPANY_2} />
+          <AdminCompanyDetails company={COMPANY_1} />
         </div>
 
         <div>
