@@ -14,9 +14,15 @@ export default function AdminCompanyDetails(props: AdminCompanyDetailsProps) {
 
   return (
     <MenuPageSectionContainer>
-      <TextInput label="Nome" initialValue={company.name} />
-      <ImageInput label="Logo" initialImageUrl={company.logo} />
-      <ImageInput label="Banner" initialImageUrl={company.banner} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <TextInput label="Nome" initialValue={company.name} />
+        <TextInput label="Nome" initialValue={company.name} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <ImageInput label="Logo" initialImageUrl={company.logo} />
+        <ImageInput label="Banner" initialImageUrl={company.banner} />
+      </div>
     </MenuPageSectionContainer>
   );
 }

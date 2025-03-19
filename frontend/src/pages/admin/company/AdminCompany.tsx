@@ -14,7 +14,7 @@ export default function AdminCompany() {
       <MenuPageTitle title="Empresa" />
 
       <div className="flex flex-col">
-        <div>
+        <div className="flex flex-col">
           <MenuPageSectionTitle title="Detalhes" />
           <AdminCompanyDetails company={COMPANY_1} />
         </div>

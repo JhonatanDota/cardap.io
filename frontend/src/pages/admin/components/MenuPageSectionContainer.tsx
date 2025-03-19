@@ -7,5 +7,5 @@ export default function MenuPageSectionContainer(
 ) {
   const { children } = props;
 
-  return <div className="flex flex-col gap-2 p-2">{children}</div>;
+  return <div className="flex flex-col gap-5 p-2">{children}</div>;
 }

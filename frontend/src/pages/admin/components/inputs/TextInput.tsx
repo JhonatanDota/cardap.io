@@ -12,11 +12,11 @@ export default function TextInput(props: TextInputProps) {
   const [value, setValue] = useState(initialValue);
 
   return (
-    <div className="flex flex-col gap-1 text-base">
+    <div className="flex flex-col gap-1 text-lg md:text-xl">
       <label className="font-medium">{label}</label>
 
       <input
-        className="border-[1px] border-gray-900 px-2 py-1 rounded-md shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none"
+        className="border-[2px] font-medium border-gray-900 p-2 rounded-md shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none"
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}

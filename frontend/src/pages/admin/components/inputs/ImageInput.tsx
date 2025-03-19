@@ -26,15 +26,13 @@ export default function ImageInput(props: ImageInputProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2 text-base">
-      <label className="font-medium">{label}</label>
-
-      <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col gap-2 text-lg">
+      <div className="flex flex-col items-center gap-3">
         {preview ? (
-          <div className="relative grow h-40">
+          <div className="relative grow h-52">
             <img
               src={preview}
-              alt={label}
+              alt={label ?? ""}
               className="w-full h-full object-cover rounded-md shadow-md"
             />
             <button
@@ -46,12 +44,12 @@ export default function ImageInput(props: ImageInputProps) {
             </button>
           </div>
         ) : (
-          <div className="w-full h-40 flex items-center justify-center bg-gray-100 border-2 border-dashed border-gray-300 rounded-md">
-            Nenhuma imagem
+          <div className="w-full h-52 flex items-center justify-center bg-gray-100 border-2 border-dashed border-gray-300 rounded-md">
+            Nenhuma imagem selecionada
           </div>
         )}
 
-        <label className="w-full text-sm text-center font-bold bg-blue-700 text-white px-4 py-2 rounded-md shadow cursor-pointer">
+        <label className="w-full text-sm md:text-lg uppercase text-center font-bold bg-blue-600 text-white p-3 rounded-md shadow cursor-pointer">
           Escolher {label}
           <input
             type="file"
