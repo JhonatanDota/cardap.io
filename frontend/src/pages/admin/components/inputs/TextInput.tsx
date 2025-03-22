@@ -1,26 +1,24 @@
-import { useState } from "react";
-
+import { UseFormRegisterReturn } from "react-hook-form";
 interface TextInputProps {
   label: string;
-  initialValue?: string;
-  mask?: string;
+  register: UseFormRegisterReturn;
+  error?: string;
 }
 
 export default function TextInput(props: TextInputProps) {
-  const { label, initialValue } = props;
-
-  const [value, setValue] = useState(initialValue);
+  const { label, register, error } = props;
 
   return (
     <div className="flex flex-col gap-1 text-lg md:text-xl">
       <label className="font-medium">{label}</label>
-
       <input
-        className="border-[2px] font-medium border-gray-900 p-2 rounded-md shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none"
+        className={`border-[2px] font-medium border-gray-900 p-2 rounded-md shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none ${
+          error ? "border-red-500" : ""
+        }`}
         type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        {...register}
       />
+      {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>
   );
 }

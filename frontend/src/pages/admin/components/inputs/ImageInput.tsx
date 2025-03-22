@@ -1,12 +1,12 @@
 import { useState } from "react";
-
 interface ImageInputProps {
   label: string;
   initialImageUrl: string | null;
+  onChange: (imageUrl: string | null) => void;
 }
 
 export default function ImageInput(props: ImageInputProps) {
-  const { label, initialImageUrl } = props;
+  const { label, initialImageUrl, onChange } = props;
 
   const [preview, setPreview] = useState<string | null>(initialImageUrl);
 
@@ -16,13 +16,16 @@ export default function ImageInput(props: ImageInputProps) {
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setPreview(previewUrl);
+      onChange(previewUrl);
     } else {
       setPreview(null);
+      onChange(null);
     }
   }
 
   function handleRemoveImage() {
     setPreview(null);
+    onChange(null);
   }
 
   return (
