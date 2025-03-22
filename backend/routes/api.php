@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 
 /*
@@ -14,6 +15,13 @@ use App\Http\Controllers\CompanyController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// =========================================================================
+// Auth
+// =========================================================================
+
+Route::post('/auth', [AuthController::class, 'login']);
+
 
 // =========================================================================
 // Companies
