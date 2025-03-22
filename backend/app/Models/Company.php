@@ -25,8 +25,8 @@ class Company extends Model
         'owner_id',
         'slug',
         'name',
-        'logo',
-        'banner',
+        'email',
+        'phone',
     ];
 
     /**
@@ -36,9 +36,9 @@ class Company extends Model
      */
     protected $casts = [
         'owner_id' => 'integer',
-        'slug' => 'string',
-        'name' => 'string',
-        'logo' => 'string',
-        'banner' => 'string',
+        'slug'  => 'string',
+        'name'  => 'string',
+        'email' => 'string',
+        'phone' => 'string',
     ];
 }

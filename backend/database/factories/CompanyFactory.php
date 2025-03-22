@@ -22,6 +22,8 @@ class CompanyFactory extends Factory
             'owner_id' => User::factory(),
             'slug' => $this->faker->slug(),
             'name' => $this->faker->company(),
+            'email' => $this->faker->unique()->email(),
+            'phone' => $this->faker->phoneNumber(),
         ];
     }
 }
