@@ -24,6 +24,7 @@ Route::post('/auth', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 // =========================================================================
