@@ -31,6 +31,19 @@ class AuthController extends Controller
     }
 
     /**
+     * Retrieve current logged user data.
+     *
+     * @return JsonResponse
+     */
+
+    public function me(): JsonResponse
+    {
+        $user = Auth::user();
+
+        return response()->json($user);
+    }
+
+    /**
      * Invalidate the token.
      *
      * @return \Illuminate\Http\JsonResponse

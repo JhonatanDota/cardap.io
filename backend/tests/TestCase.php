@@ -27,7 +27,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Set the currently logged in user for the application.
+     * Set the currently logged user for the application.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable $user
      * @param  string|null $guard
