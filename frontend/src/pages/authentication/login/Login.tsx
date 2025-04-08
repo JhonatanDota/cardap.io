@@ -23,7 +23,7 @@ export default function Login() {
               <input
                 type="text"
                 placeholder="Por favor, insira seu email"
-                className="text-lg md:text-xl font-medium focus:outline-none"
+                className="text-lg md:text-xl focus:outline-none"
               />
             </div>
           </div>
@@ -34,13 +34,13 @@ export default function Login() {
               <input
                 type="password"
                 placeholder="Por favor, insira sua senha"
-                className="text-lg md:text-xl font-medium focus:outline-none"
+                className="text-lg md:text-xl focus:outline-none"
               />
             </div>
           </div>
         </div>
 
-        <button className="bg-[#7D2AE8] p-4 text-lg font-bold text-white rounded-md">
+        <button className="bg-[#7D2AE8] p-4 text-base font-bold uppercase text-white rounded-md">
           Entrar
         </button>
       </div>
