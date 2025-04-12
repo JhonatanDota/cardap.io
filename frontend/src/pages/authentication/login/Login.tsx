@@ -8,7 +8,7 @@ import { handleErrors } from "../../../requests/handleErrors";
 
 import { auth } from "../../../requests/authenticationRequests";
 
-import { loginSchemaData, LoginSchemaType } from "../../../schema/loginSchema";
+import { loginSchemaData, LoginSchemaType } from "../../../schemas/loginSchema";
 
 import { MdEmail, MdLock } from "react-icons/md";
 
