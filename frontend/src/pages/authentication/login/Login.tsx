@@ -1,7 +1,24 @@
-import { MdEmail } from "react-icons/md";
-import { MdLock } from "react-icons/md";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { loginSchemaData, LoginSchemaType } from "../../../schema/loginSchema";
+
+import { MdEmail, MdLock } from "react-icons/md";
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchemaData),
+  });
+
+  function onSubmit(data: LoginSchemaType): void {
+    console.log("Login data:", data);
+  }
+
   return (
     <div className="flex flex-col items-center gap-8 mt-16 m-auto">
       <img
@@ -10,40 +27,59 @@ export default function Login() {
         alt="Cardap.io"
       />
 
-      <div className="flex flex-col p-4 gap-8 rounded-md">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col p-4 gap-8 rounded-md"
+      >
         <div className="flex flex-col">
           <p className="text-xl md:text-2xl font-medium">Login</p>
           <hr className="w-1/4 h-1 bg-[#7D2AE8]" />
         </div>
 
         <div className="flex flex-col gap-5 md:gap-8">
-          <div className="border-b-2 border-gray-300  focus-within:border-[#F97316] focus-within:shadow-sm transition-colors duration-300">
+          <div className="border-b-2 border-gray-300 focus-within:border-[#F97316] focus-within:shadow-sm transition-colors duration-300">
             <div className="flex items-center gap-3 pb-4">
               <MdEmail className="w-7 h-7" fill="#F97316" />
               <input
                 type="text"
                 placeholder="Por favor, insira seu email"
-                className="text-lg md:text-xl focus:outline-none"
+                className="text-lg md:text-xl focus:outline-none w-full"
+                autoComplete="off"
+                {...register("email")}
               />
             </div>
+            {errors.email && (
+              <span className="text-red-500 text-sm">
+                {errors.email.message}
+              </span>
+            )}
           </div>
 
-          <div className="border-b-2 border-gray-300  focus-within:border-[#F97316] focus-within:shadow-sm transition-colors duration-300">
+          <div className="border-b-2 border-gray-300 focus-within:border-[#F97316] focus-within:shadow-sm transition-colors duration-300">
             <div className="flex items-center gap-3 pb-4">
               <MdLock className="w-7 h-7" fill="#F97316" />
               <input
                 type="password"
                 placeholder="Por favor, insira sua senha"
-                className="text-lg md:text-xl focus:outline-none"
+                className="text-lg md:text-xl focus:outline-none w-full"
+                {...register("password")}
               />
             </div>
+            {errors.password && (
+              <span className="text-red-500 text-sm">
+                {errors.password.message}
+              </span>
+            )}
           </div>
         </div>
 
-        <button className="bg-[#7D2AE8] p-4 text-base font-bold uppercase text-white rounded-md">
+        <button
+          type="submit"
+          className="bg-[#7D2AE8] p-4 text-base font-bold uppercase text-white rounded-md"
+        >
           Entrar
         </button>
-      </div>
+      </form>
     </div>
   );
 }
