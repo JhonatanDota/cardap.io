@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 
+import { Link } from "react-router-dom";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { handleErrors } from "../../../requests/handleErrors";
@@ -28,7 +30,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 mt-16 m-auto">
+    <div className="flex flex-col items-center gap-6 mt-16 m-auto">
       <img
         className="w-64 md:w-80"
         src="/images/logos/CardapioLogoBlack.svg"
@@ -88,6 +90,13 @@ export default function Login() {
           Entrar
         </button>
       </form>
+
+      <span className="text-base font-medium">
+        Ainda não tem uma conta?{" "}
+        <Link className="folt-bold text-[#7D2AE8]" to="/register">
+          Registre-se!
+        </Link>
+      </span>
     </div>
   );
 }

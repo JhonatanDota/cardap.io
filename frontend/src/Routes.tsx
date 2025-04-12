@@ -2,6 +2,7 @@ import { Route, Routes as RouterDomRoutes } from "react-router-dom";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/authentication/login/Login";
+import Register from "./pages/authentication/register/Register";
 
 import AdminLayout from "./pages/admin/layout/AdminLayout";
 import AdminHome from "./pages/admin/home/AdminHome";
@@ -16,6 +17,7 @@ export default function Routes() {
     <RouterDomRoutes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminHome />} />
