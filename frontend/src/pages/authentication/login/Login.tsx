@@ -2,6 +2,10 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { handleErrors } from "../../../requests/handleErrors";
+
+import { auth } from "../../../requests/authenticationRequests";
+
 import { loginSchemaData, LoginSchemaType } from "../../../schema/loginSchema";
 
 import { MdEmail, MdLock } from "react-icons/md";
@@ -15,8 +19,12 @@ export default function Login() {
     resolver: zodResolver(loginSchemaData),
   });
 
-  function onSubmit(data: LoginSchemaType): void {
-    console.log("Login data:", data);
+  async function onSubmit(data: LoginSchemaType): Promise<void> {
+    try {
+      const loginResponse = await auth(data);
+    } catch (error) {
+      handleErrors(error);
+    }
   }
 
   return (
@@ -49,7 +57,7 @@ export default function Login() {
               />
             </div>
             {errors.email && (
-              <span className="text-red-500 text-sm">
+              <span className="font-bold text-sm text-red-400">
                 {errors.email.message}
               </span>
             )}
@@ -66,7 +74,7 @@ export default function Login() {
               />
             </div>
             {errors.password && (
-              <span className="text-red-500 text-sm">
+              <span className="font-bold text-sm text-red-400">
                 {errors.password.message}
               </span>
             )}
