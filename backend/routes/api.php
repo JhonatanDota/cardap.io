@@ -21,6 +21,7 @@ use App\Http\Controllers\CompanyController;
 // =========================================================================
 
 Route::post('/auth', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/me', [AuthController::class, 'me']);

@@ -12,6 +12,13 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    public const PASSWORD_MIN_LENGTH = 6;
+    public const PASSWORD_MAX_LENGTH = 60;
+
+    public const NAME_MIN_LENGTH = 3;
+    public const NAME_MAX_LENGTH = 150;
+
+    public const EMAIL_MAX_LENGTH = 150;
     /**
      * The attributes that are mass assignable.
      *

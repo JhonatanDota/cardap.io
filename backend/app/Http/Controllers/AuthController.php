@@ -6,12 +6,22 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
+use App\Repositories\UserRepository;
+
 use App\Http\Requests\Auth\AuthRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Get a JWT via given credentials.
      *
@@ -31,6 +41,22 @@ class AuthController extends Controller
     }
 
     /**
+     * Register user.
+     *
+     * @param RegisterRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        $inputs = $request->validated();
+
+        $user = $this->userRepository->create($inputs);
+
+        return response()->json($user, Response::HTTP_CREATED);
+    }
+
+    /**
      * Retrieve current logged user data.
      *
      * @return JsonResponse
@@ -44,7 +70,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Invalidate the token.
+     * Invalidate token.
      *
      * @return \Illuminate\Http\JsonResponse
      */
