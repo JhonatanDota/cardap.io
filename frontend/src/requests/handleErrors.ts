@@ -20,8 +20,8 @@ export function handleAxiosError(error: AxiosError) {
 
   if (response) {
     switch (statusCode) {
-      case HttpStatusCode.BadRequest:
-        handleBadRequestError(response.data as ErrorResponse);
+      case HttpStatusCode.UnprocessableEntity:
+        handleUnprocessableError(response.data as ErrorResponse);
         break;
 
       case HttpStatusCode.Forbidden:
@@ -42,7 +42,7 @@ export function handleAxiosError(error: AxiosError) {
   }
 }
 
-function handleBadRequestError(errors: ErrorResponse): void {
+function handleUnprocessableError(errors: ErrorResponse): void {
   showErrors(errors);
 }
 
@@ -68,7 +68,7 @@ function handleInternalServerRequestError(): void {
 export function showErrors(error: ErrorResponse): void {
   Object.keys(error.errors).forEach((field) => {
     error.errors[field].forEach((message) => {
-      alert(`${field}: ${message}`);
+      toast.error(`${message}`);
     });
   });
 }

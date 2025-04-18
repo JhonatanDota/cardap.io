@@ -14,6 +14,7 @@ export function requester(): AxiosInstance {
       headers: {
         "Content-Type": "application/json",
         accept: "application/json",
+        "Accept-Language": "pt",
         Authorization: `Bearer `,
       },
       timeout: API_TIMEOUT_MILISECONDS,
