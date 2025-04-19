@@ -32,6 +32,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 // Companies
 // =========================================================================
 
-Route::prefix('companies')->group(function () {
-    Route::get('/{slug}', [CompanyController::class, 'retrieve']);
+Route::group(['middleware' => ['jwt.auth']], function () {
+    Route::prefix('companies')->group(function () {
+        Route::get('/my-company', [CompanyController::class, 'userCompany']);
+    });
 });

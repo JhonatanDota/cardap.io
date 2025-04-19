@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\JsonResponse;
 
 use App\Repositories\CompanyRepository;
@@ -17,19 +18,15 @@ class CompanyController extends Controller
     }
 
     /**
-     * Retrieve Company.
+     * Retrieve User Company.
      *
-     * @param string $slug
      * @return JsonResponse
      */
 
-    public function retrieve(string $slug): JsonResponse
+    public function userCompany(): JsonResponse
     {
-        $company = $this->companyRepository->find($slug);
-
-        if (is_null($company)) {
-            return response()->json([], Response::HTTP_NOT_FOUND);
-        }
+        $user = Auth::user();
+        $company = $user->company;
 
         return response()->json($company);
     }

@@ -74,4 +74,16 @@ class User extends Authenticatable implements JWTSubject
             ]
         ];
     }
+
+    // =========================================================================
+    // Relationships
+    // =========================================================================
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     **/
+    public function company()
+    {
+        return $this->HasOne(Company::class, 'owner_id');
+    }
 }
