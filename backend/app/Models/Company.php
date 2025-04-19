@@ -17,6 +17,7 @@ class Company extends Model
     protected $fillable = [
         'owner_id',
         'name',
+        'cnpj',
         'email',
         'phone',
         'street',
@@ -36,6 +37,7 @@ class Company extends Model
     protected $casts = [
         'owner_id' => 'integer',
         'name'     => 'string',
+        'cnpj'     => 'string',
         'email'    => 'string',
         'phone'    => 'string',
         'street'   => 'string',

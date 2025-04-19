@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('owner_id')->unsigned()->unique();
             $table->foreign('owner_id')->references('id')->on('users');
             $table->string('name');
+            $table->string('cnpj');
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('street');

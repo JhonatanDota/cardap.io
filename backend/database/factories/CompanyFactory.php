@@ -20,6 +20,7 @@ class CompanyFactory extends Factory
         return [
             'owner_id'     => User::factory(),
             'name'         => $this->faker->company(),
+            'cnpj'         => $this->faker->numerify('##############'),
             'email'        => $this->faker->unique()->companyEmail(),
             'phone'        => $this->faker->numerify('###########'),
             'street'       => $this->faker->streetName(),
