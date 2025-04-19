@@ -15,10 +15,17 @@ return new class extends Migration
             $table->id();
             $table->integer('owner_id')->unsigned()->unique();
             $table->foreign('owner_id')->references('id')->on('users');
-            $table->string('slug')->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
+            $table->string('street');
+            $table->string('number');
+            $table->string('complement')->nullable();
+            $table->string('neighborhood');
+            $table->string('city');
+            $table->string('postal_code');
+            $table->string('state');
+
             $table->timestamps();
         });
     }

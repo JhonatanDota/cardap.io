@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
 use App\Models\User;
 
 /**
@@ -19,11 +18,17 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'owner_id' => User::factory(),
-            'slug' => $this->faker->slug(),
-            'name' => $this->faker->company(),
-            'email' => $this->faker->unique()->email(),
-            'phone' => $this->faker->phoneNumber(),
+            'owner_id'     => User::factory(),
+            'name'         => $this->faker->company(),
+            'email'        => $this->faker->unique()->companyEmail(),
+            'phone'        => $this->faker->numerify('###########'),
+            'street'       => $this->faker->streetName(),
+            'number'       => $this->faker->buildingNumber(),
+            'complement'   => $this->faker->optional()->secondaryAddress(),
+            'neighborhood' => $this->faker->streetSuffix(),
+            'city'         => $this->faker->city(),
+            'postal_code'  => $this->faker->numerify('########'),
+            'state'        => $this->faker->stateAbbr(),
         ];
     }
 }

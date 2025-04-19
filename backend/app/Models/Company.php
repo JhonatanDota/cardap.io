@@ -10,23 +10,22 @@ class Company extends Model
     use HasFactory;
 
     /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'slug';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
         'owner_id',
-        'slug',
         'name',
         'email',
         'phone',
+        'street',
+        'number',
+        'complement',
+        'neighborhood',
+        'city',
+        'postal_code',
+        'state',
     ];
 
     /**
@@ -36,9 +35,15 @@ class Company extends Model
      */
     protected $casts = [
         'owner_id' => 'integer',
-        'slug'  => 'string',
-        'name'  => 'string',
-        'email' => 'string',
-        'phone' => 'string',
+        'name'     => 'string',
+        'email'    => 'string',
+        'phone'    => 'string',
+        'street'   => 'string',
+        'number'   => 'string',
+        'complement' => 'string',
+        'neighborhood' => 'string',
+        'city'     => 'string',
+        'postal_code' => 'string',
+        'state'    => 'string',
     ];
 }
