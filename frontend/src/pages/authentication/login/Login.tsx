@@ -1,12 +1,16 @@
+import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { handleErrors } from "../../../requests/handleErrors";
 
 import { auth } from "../../../requests/authenticationRequests";
+
+import { handleSuccessAuth } from "../../../functions/auth";
 
 import { loginSchemaData, LoginSchemaType } from "../../../schemas/loginSchema";
 
@@ -21,11 +25,21 @@ export default function Login() {
     resolver: zodResolver(loginSchemaData),
   });
 
+  const navigate = useNavigate();
+  const [logging, setLogging] = useState<boolean>(false);
+
   async function onSubmit(data: LoginSchemaType): Promise<void> {
+    setLogging(true);
+
     try {
       const loginResponse = await auth(data);
+
+      handleSuccessAuth(loginResponse.data);
+      navigate("/admin");
     } catch (error) {
       handleErrors(error);
+    } finally {
+      setLogging(false);
     }
   }
 
@@ -85,7 +99,8 @@ export default function Login() {
 
         <button
           type="submit"
-          className="bg-[#7D2AE8] p-4 text-base font-bold uppercase text-white rounded-md"
+          className="bg-[#7D2AE8] p-4 text-base font-bold uppercase text-white rounded-md disabled:animate-pulse"
+          disabled={logging}
         >
           Entrar
         </button>
