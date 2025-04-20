@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules\Fields;
+namespace App\Rules\Fields\Address;
 
 class PostalCodeRules
 {

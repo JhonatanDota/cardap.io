@@ -6,8 +6,6 @@ use Tests\TestCase;
 
 use Illuminate\Support\Str;
 
-use App\Models\User;
-
 use App\Rules\Fields\User\NameRules;
 use App\Rules\Fields\User\PasswordRules;
 use App\Rules\Fields\Commom\EmailRules;
