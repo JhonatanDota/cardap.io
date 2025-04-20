@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\JsonResponse;
 
+use App\Http\Requests\Company\CreateCompanyRequest;
+
 use App\Repositories\CompanyRepository;
 
 class CompanyController extends Controller
@@ -15,6 +17,17 @@ class CompanyController extends Controller
     public function __construct(CompanyRepository $companyRepository)
     {
         $this->companyRepository = $companyRepository;
+    }
+
+    /**
+     * Create Company.
+     *
+     * @return JsonResponse
+     */
+
+    public function store(CreateCompanyRequest $request): JsonResponse
+    {
+        //
     }
 
     /**
