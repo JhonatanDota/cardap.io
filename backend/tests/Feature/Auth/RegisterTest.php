@@ -8,6 +8,10 @@ use Illuminate\Support\Str;
 
 use App\Models\User;
 
+use App\Rules\Fields\User\NameRules;
+use App\Rules\Fields\User\PasswordRules;
+use App\Rules\Fields\Commom\EmailRules;
+
 class RegisterTest extends TestCase
 {
     /**
@@ -46,7 +50,7 @@ class RegisterTest extends TestCase
         $password = $this->faker->password();
 
         $response = $this->json('POST', 'api/register/', [
-            'name' => Str::random(User::NAME_MIN_LENGTH - 1),
+            'name' => Str::random(NameRules::MIN_LENGTH - 1),
             'email' => $this->faker->email(),
             'password' => $password,
             'password_confirmation' => $password,
@@ -59,7 +63,7 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertJsonFragment([
-            'name' => ['The name field must be at least ' . User::NAME_MIN_LENGTH . ' characters.'],
+            'name' => ['The name field must be at least ' . NameRules::MIN_LENGTH . ' characters.'],
         ]);
     }
 
@@ -73,7 +77,7 @@ class RegisterTest extends TestCase
         $password = $this->faker->password();
 
         $response = $this->json('POST', 'api/register/', [
-            'name' => Str::random(User::NAME_MAX_LENGTH + 1),
+            'name' => Str::random(NameRules::MAX_LENGTH + 1),
             'email' => $this->faker->email(),
             'password' => $password,
             'password_confirmation' => $password,
@@ -86,7 +90,7 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertJsonFragment([
-            'name' => ['The name field must not be greater than ' . User::NAME_MAX_LENGTH . ' characters.'],
+            'name' => ['The name field must not be greater than ' . NameRules::MAX_LENGTH . ' characters.'],
         ]);
     }
 
@@ -154,7 +158,7 @@ class RegisterTest extends TestCase
 
         $response = $this->json('POST', 'api/register/', [
             'name' => $this->faker->name(),
-            'email' => Str::random(User::EMAIL_MAX_LENGTH + 1) . '@mail.com',
+            'email' => Str::random(EmailRules::MAX_LENGTH + 1) . '@mail.com',
             'password' => $password,
             'password_confirmation' => $password,
         ]);
@@ -166,7 +170,7 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertJsonFragment([
-            'email' => ['The email field must not be greater than ' . User::EMAIL_MAX_LENGTH . ' characters.'],
+            'email' => ['The email field must not be greater than ' . EmailRules::MAX_LENGTH . ' characters.'],
         ]);
     }
 
@@ -259,7 +263,7 @@ class RegisterTest extends TestCase
      */
     public function testTryRegisterWithTooTinyPassword(): void
     {
-        $password = Str::random(User::PASSWORD_MIN_LENGTH - 1);
+        $password = Str::random(PasswordRules::MIN_LENGTH - 1);
 
         $response = $this->json('POST', 'api/register/', [
             'name' => $this->faker->name(),
@@ -275,7 +279,7 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertJsonFragment([
-            'password' => ['The password field must be at least ' . User::PASSWORD_MIN_LENGTH . ' characters.'],
+            'password' => ['The password field must be at least ' . PasswordRules::MIN_LENGTH . ' characters.'],
         ]);
     }
 
@@ -286,7 +290,7 @@ class RegisterTest extends TestCase
      */
     public function testTryRegisterWithTooLongPassword(): void
     {
-        $password = Str::random(User::PASSWORD_MAX_LENGTH + 1);
+        $password = Str::random(PasswordRules::MAX_LENGTH + 1);
 
         $response = $this->json('POST', 'api/register/', [
             'name' => $this->faker->name(),
@@ -302,7 +306,7 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertJsonFragment([
-            'password' => ['The password field must not be greater than ' . User::PASSWORD_MAX_LENGTH . ' characters.'],
+            'password' => ['The password field must not be greater than ' . PasswordRules::MAX_LENGTH . ' characters.'],
         ]);
     }
 

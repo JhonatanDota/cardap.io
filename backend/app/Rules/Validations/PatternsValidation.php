@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Rules;
+namespace App\Rules\Validations;
 
-class ValidationPatterns
+class PatternsValidation
 {
     public const EMAIL_WITH_TLD = '/^[^@\s]+@[^@\s]+\.[^@\s]+$/';
 }

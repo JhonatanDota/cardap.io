@@ -6,7 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Validation\Rule;
 
-use App\Rules\ValidationPatterns;
+use App\Rules\Validations\PatternsValidation;
+use App\Rules\Fields\User\NameRules;
+use App\Rules\Fields\User\PasswordRules;
+use App\Rules\Fields\Commom\EmailRules;
 
 use App\Models\User;
 
@@ -30,9 +33,9 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'min:' . User::NAME_MIN_LENGTH, 'max:' . User::NAME_MAX_LENGTH],
-            'email' => ['required', 'string', 'email', 'max:' . User::EMAIL_MAX_LENGTH, 'regex:' . ValidationPatterns::EMAIL_WITH_TLD,  Rule::unique(User::class, 'email')],
-            'password' => ['required', 'string', 'min:' . User::PASSWORD_MIN_LENGTH, 'max:' . User::PASSWORD_MAX_LENGTH, 'confirmed']
+            'name' => ['required', 'string', 'min:' . NameRules::MIN_LENGTH, 'max:' . NameRules::MAX_LENGTH],
+            'email' => ['required', 'string', 'email', 'max:' . EmailRules::MAX_LENGTH, 'regex:' . PatternsValidation::EMAIL_WITH_TLD,  Rule::unique(User::class, 'email')],
+            'password' => ['required', 'string', 'min:' . PasswordRules::MIN_LENGTH, 'max:' . PasswordRules::MAX_LENGTH, 'confirmed']
         ];
     }
 }
