@@ -13,6 +13,7 @@ use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
+use App\Rules\Fields\Address\StreetRules;
 
 class CreateCompanyTest extends TestCase
 {
@@ -432,6 +433,84 @@ class CreateCompanyTest extends TestCase
 
         $response->assertJsonFragment([
             'phone' => ['The phone field must be ' . PhoneRules::LENGTH . ' characters.'],
+        ]);
+    }
+
+    /**
+     * Test try create company without street.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithoutStreet(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'street' => null
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'street',
+        ]);
+
+        $response->assertJsonFragment([
+            'street' => ['The street field is required.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with street too tiny.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithStreetTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'street' => Str::random(StreetRules::MIN_LENGTH - 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'street',
+        ]);
+
+        $response->assertJsonFragment([
+            'street' => ['The street field must be at least ' . StreetRules::MIN_LENGTH . ' characters.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with street too long.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithStreetTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'street' => Str::random(StreetRules::MAX_LENGTH + 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'street',
+        ]);
+
+        $response->assertJsonFragment([
+            'street' => ['The street field must not be greater than ' . StreetRules::MAX_LENGTH . ' characters.']
         ]);
     }
 }
