@@ -44,7 +44,7 @@ class CreateCompanyRequest extends FormRequest
             'name' => ['required', 'string', 'min:' . NameRules::MIN_LENGTH, 'max:' . NameRules::MAX_LENGTH],
             'cnpj' => ['required', 'string', 'regex:' . PatternsValidation::ONLY_DIGITS, 'size:' . CnpjRules::LENGTH],
             'email' => ['required', 'string', 'email', 'max:' . EmailRules::MAX_LENGTH, 'regex:' . PatternsValidation::EMAIL_WITH_TLD,  Rule::unique(Company::class, 'email')],
-            'phone' => ['required', 'string', 'size:' . PhoneRules::LENGTH],
+            'phone' => ['required', 'string', 'regex:' . PatternsValidation::ONLY_DIGITS, 'size:' . PhoneRules::LENGTH],
             'street' => ['required', 'string', 'min:' . StreetRules::MIN_LENGTH, 'max:' . StreetRules::MAX_LENGTH],
             'number' => ['required', 'string', 'min:' . NumberRules::MIN_LENGTH, 'max:' . NumberRules::MAX_LENGTH],
             'complement' => ['nullable', 'string', 'max:' . ComplementRules::MAX_LENGTH],

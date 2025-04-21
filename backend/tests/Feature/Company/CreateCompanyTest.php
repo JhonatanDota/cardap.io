@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Company;
 
 use App\Rules\Fields\Commom\CnpjRules;
+use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
 
@@ -327,6 +328,110 @@ class CreateCompanyTest extends TestCase
 
         $response->assertJsonFragment([
             'email' => ['The email has already been taken.'],
+        ]);
+    }
+
+    /**
+     * Test try create company without phone.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithoutPhone(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'phone' => null
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'phone',
+        ]);
+
+        $response->assertJsonFragment([
+            'phone' => ['The phone field is required.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with phone that contains letters.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithPhoneThatContainsLetters(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'phone' => Str::random(PhoneRules::LENGTH)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'phone',
+        ]);
+
+        $response->assertJsonFragment([
+            'phone' => ['The phone field format is invalid.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with phone too tiny.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithPhoneTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'phone' => $this->faker->numerify(str_repeat('#', PhoneRules::LENGTH - 1))
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'phone',
+        ]);
+
+        $response->assertJsonFragment([
+            'phone' => ['The phone field must be ' . PhoneRules::LENGTH . ' characters.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with phone too long.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithPhoneTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'phone' => $this->faker->numerify(str_repeat('#', PhoneRules::LENGTH + 1))
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'phone',
+        ]);
+
+        $response->assertJsonFragment([
+            'phone' => ['The phone field must be ' . PhoneRules::LENGTH . ' characters.'],
         ]);
     }
 }
