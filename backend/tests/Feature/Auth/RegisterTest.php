@@ -6,6 +6,8 @@ use Tests\TestCase;
 
 use Illuminate\Support\Str;
 
+use App\Models\User;
+
 use App\Rules\Fields\User\NameRules;
 use App\Rules\Fields\User\PasswordRules;
 use App\Rules\Fields\Commom\EmailRules;
@@ -182,12 +184,10 @@ class RegisterTest extends TestCase
         $email = $this->faker->email();
         $password = $this->faker->password();
 
-        $this->json('POST', 'api/register/', [
-            'name' => $this->faker->name(),
+        User::factory([
             'email' => $email,
             'password' => $password,
-            'password_confirmation' => $password,
-        ]);
+        ])->create();
 
         $response = $this->json('POST', 'api/register/', [
             'name' => $this->faker->name(),
