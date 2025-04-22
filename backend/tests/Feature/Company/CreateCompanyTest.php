@@ -795,4 +795,56 @@ class CreateCompanyTest extends TestCase
             'postal_code' => ['The postal code field must be ' . PostalCodeRules::LENGTH . ' characters.'],
         ]);
     }
+
+    /**
+     * Test try create company without state.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithoutState(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'state' => null
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'state',
+        ]);
+
+        $response->assertJsonFragment([
+            'state' => ['The state field is required.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with invalid state.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithInvalidState(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'state' => 'SD'
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'state',
+        ]);
+
+        $response->assertJsonFragment([
+            'state' => ['The selected state is invalid.'],
+        ]);
+    }
 }
