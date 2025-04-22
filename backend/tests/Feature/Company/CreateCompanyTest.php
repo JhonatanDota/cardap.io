@@ -15,6 +15,7 @@ use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Fields\Address\NumberRules;
+use App\Rules\Fields\Address\ComplementRules;
 
 class CreateCompanyTest extends TestCase
 {
@@ -564,6 +565,50 @@ class CreateCompanyTest extends TestCase
 
         $response->assertJsonFragment([
             'number' => ['The number field must not be greater than ' . NumberRules::MAX_LENGTH . ' characters.']
+        ]);
+    }
+
+    // /**
+    //  * Test create company without complement.
+    //  *
+    //  * @return void
+    //  */
+    // public function testCreateCompanyWithoutComplement(): void
+    // {
+    //     $this->actingAs($this->user); //TODO DESCOMENTAR QUANDO OS TESTES DE CRIAÇÃO ESTIVEREM PRONTOS
+
+    //     $data = Company::factory([
+    //         'complement' => null
+    //     ])->make()->toArray();
+
+    //     $response = $this->json('POST', 'api/companies', $data);
+
+    //     $response->assertCreated();
+    // }
+
+    /**
+     * Test try create company with complement too long.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithComplementTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'complement' => Str::random(ComplementRules::MAX_LENGTH + 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'complement',
+        ]);
+
+        $response->assertJsonFragment([
+            'complement' => ['The complement field must not be greater than ' . ComplementRules::MAX_LENGTH . ' characters.']
         ]);
     }
 }
