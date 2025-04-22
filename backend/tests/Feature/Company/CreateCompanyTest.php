@@ -14,6 +14,7 @@ use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Address\StreetRules;
+use App\Rules\Fields\Address\NumberRules;
 
 class CreateCompanyTest extends TestCase
 {
@@ -511,6 +512,58 @@ class CreateCompanyTest extends TestCase
 
         $response->assertJsonFragment([
             'street' => ['The street field must not be greater than ' . StreetRules::MAX_LENGTH . ' characters.']
+        ]);
+    }
+
+    /**
+     * Test try create company without number.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithoutNumber(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'number' => null
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'number',
+        ]);
+
+        $response->assertJsonFragment([
+            'number' => ['The number field is required.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with number too long.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithNumberTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'number' => Str::random(NumberRules::MAX_LENGTH + 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'number',
+        ]);
+
+        $response->assertJsonFragment([
+            'number' => ['The number field must not be greater than ' . NumberRules::MAX_LENGTH . ' characters.']
         ]);
     }
 }
