@@ -16,6 +16,7 @@ use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Fields\Address\NumberRules;
 use App\Rules\Fields\Address\ComplementRules;
+use App\Rules\Fields\Address\NeighborhoodRules;
 
 class CreateCompanyTest extends TestCase
 {
@@ -609,6 +610,84 @@ class CreateCompanyTest extends TestCase
 
         $response->assertJsonFragment([
             'complement' => ['The complement field must not be greater than ' . ComplementRules::MAX_LENGTH . ' characters.']
+        ]);
+    }
+
+    /**
+     * Test try create company without neighborhood.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithoutNeighborhood(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'neighborhood' => null
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'neighborhood',
+        ]);
+
+        $response->assertJsonFragment([
+            'neighborhood' => ['The neighborhood field is required.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with neighborhood too tiny.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithNeighborhoodTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'neighborhood' => Str::random(NeighborhoodRules::MIN_LENGTH - 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'neighborhood',
+        ]);
+
+        $response->assertJsonFragment([
+            'neighborhood' => ['The neighborhood field must be at least ' . NeighborhoodRules::MIN_LENGTH . ' characters.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with neighborhood too long.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithNeighborhoodTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'neighborhood' => Str::random(NeighborhoodRules::MAX_LENGTH + 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'neighborhood',
+        ]);
+
+        $response->assertJsonFragment([
+            'neighborhood' => ['The neighborhood field must not be greater than ' . NeighborhoodRules::MAX_LENGTH . ' characters.']
         ]);
     }
 }
