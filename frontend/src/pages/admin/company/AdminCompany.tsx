@@ -1,29 +1,39 @@
-import { COMPANY_1 } from "../../../data/companies";
-import { ADDRESS_1 } from "../../../data/addresses";
+import { useEffect, useState } from "react";
+
+import { handleErrors } from "../../../requests/handleErrors";
+
+import { CompanyModel } from "../../../models/companyModels";
+
+import { myCompany } from "../../../requests/companyRequests";
 
 import MenuPageContainer from "../components/MenuPageContainer";
 import MenuPageTitle from "../components/MenuPageTitle";
-import MenuPageSectionTitle from "../components/MenuPageSectionTitle";
 
-import AdminCompanyDetails from "./AdminCompanyDetails";
-import AdminCompanyAddress from "./AdminCompanyAddress";
+import AdminCompanyForm from "./AdminCompanyForm";
 
 export default function AdminCompany() {
+  const [company, setCompany] = useState<CompanyModel>();
+
+  useEffect(function () {
+    fetchMyCompany();
+  }, []);
+
+  async function fetchMyCompany() {
+    try {
+      const company = await myCompany();
+      const companyData = company.data;
+
+      if (companyData) setCompany(companyData);
+    } catch (error) {
+      handleErrors(error);
+    }
+  }
+
   return (
     <MenuPageContainer>
-      <MenuPageTitle title="Empresa" />
+      <MenuPageTitle title="Minha Empresa" />
 
-      <div className="flex flex-col">
-        <div className="flex flex-col">
-          <MenuPageSectionTitle title="Detalhes" />
-          <AdminCompanyDetails company={COMPANY_1} />
-        </div>
-
-        <div>
-          <MenuPageSectionTitle title="Endereço" />
-          <AdminCompanyAddress address={ADDRESS_1} />
-        </div>
-      </div>
+      <AdminCompanyForm company={company} />
     </MenuPageContainer>
   );
 }

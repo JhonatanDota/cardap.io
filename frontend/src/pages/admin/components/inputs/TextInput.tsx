@@ -12,10 +12,11 @@ export default function TextInput(props: TextInputProps) {
     <div className="flex flex-col gap-1 text-lg md:text-xl">
       <label className="font-medium">{label}</label>
       <input
-        className={`border-[2px] font-medium border-gray-900 p-2 rounded-md shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none ${
+        className={`border-[2px] font-medium border-gray-900 p-2 shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none ${
           error ? "border-red-500" : ""
         }`}
         type="text"
+        autoComplete="off"
         {...register}
       />
       {error && <span className="text-red-500 text-sm">{error}</span>}

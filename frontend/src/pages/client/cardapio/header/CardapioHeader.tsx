@@ -17,10 +17,10 @@ export default function CardapioHeader(props: CardapioHeaderProps) {
 
   return (
     <div className="flex flex-col">
-      <Banner imageUrl={company.banner} />
+      {/* <Banner imageUrl={company.banner} />
       <Logo imageUrl={company.logo} />
       <CompanyName name={company.name} />
-      <OperatingStatus operatingStatus={company.operatingStatus}/>
+      <OperatingStatus operatingStatus={company.operatingStatus}/> */}
       <Address address={address} />
     </div>
   );
