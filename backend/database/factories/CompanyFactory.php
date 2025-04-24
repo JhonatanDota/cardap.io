@@ -10,7 +10,6 @@ use App\Models\User;
 
 use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Commom\PhoneRules;
-use App\Rules\Fields\Address\PostalCodeRules;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Company>
@@ -35,7 +34,6 @@ class CompanyFactory extends Factory
             'complement'   => $this->faker->optional()->secondaryAddress(),
             'neighborhood' => $this->faker->streetSuffix(),
             'city'         => $this->faker->city(),
-            'postal_code'  => $this->faker->numerify(str_repeat('#', PostalCodeRules::LENGTH)),
             'state'        => $this->faker->randomElement(StatesEnum::values()),
         ];
     }

@@ -9,7 +9,7 @@ class UserRepository
     /**
      * Create User.
      *
-     * @param string $data
+     * @param array $inputs
      * @return User
      */
 

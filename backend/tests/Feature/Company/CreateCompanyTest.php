@@ -17,7 +17,7 @@ use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Fields\Address\NumberRules;
 use App\Rules\Fields\Address\ComplementRules;
 use App\Rules\Fields\Address\NeighborhoodRules;
-use App\Rules\Fields\Address\PostalCodeRules;
+use App\Rules\Fields\Address\CityRules;
 
 class CreateCompanyTest extends TestCase
 {
@@ -570,23 +570,23 @@ class CreateCompanyTest extends TestCase
         ]);
     }
 
-    // /**
-    //  * Test create company without complement.
-    //  *
-    //  * @return void
-    //  */
-    // public function testCreateCompanyWithoutComplement(): void
-    // {
-    //     $this->actingAs($this->user); //TODO DESCOMENTAR QUANDO OS TESTES DE CRIAÇÃO ESTIVEREM PRONTOS
+    /**
+     * Test create company without complement.
+     *
+     * @return void
+     */
+    public function testCreateCompanyWithoutComplement(): void
+    {
+        $this->actingAs($this->user);
 
-    //     $data = Company::factory([
-    //         'complement' => null
-    //     ])->make()->toArray();
+        $data = Company::factory([
+            'complement' => null
+        ])->make()->toArray();
 
-    //     $response = $this->json('POST', 'api/companies', $data);
+        $response = $this->json('POST', 'api/companies', $data);
 
-    //     $response->assertCreated();
-    // }
+        $response->assertCreated();
+    }
 
     /**
      * Test try create company with complement too long.
@@ -693,110 +693,6 @@ class CreateCompanyTest extends TestCase
     }
 
     /**
-     * Test try create company without postal_code.
-     *
-     * @return void
-     */
-    public function testTryCreateCompanyWithoutPostalCode(): void
-    {
-        $this->actingAs($this->user);
-
-        $data = Company::factory([
-            'postal_code' => null
-        ])->make()->toArray();
-
-        $response = $this->json('POST', 'api/companies', $data);
-
-        $response->assertUnprocessable();
-
-        $response->assertJsonValidationErrors([
-            'postal_code',
-        ]);
-
-        $response->assertJsonFragment([
-            'postal_code' => ['The postal code field is required.'],
-        ]);
-    }
-
-    /**
-     * Test try create company with postal_code that contains letters.
-     *
-     * @return void
-     */
-    public function testTryCreateCompanyWithPostalCodeThatContainsLetters(): void
-    {
-        $this->actingAs($this->user);
-
-        $data = Company::factory([
-            'postal_code' => Str::random(PostalCodeRules::LENGTH)
-        ])->make()->toArray();
-
-        $response = $this->json('POST', 'api/companies', $data);
-
-        $response->assertUnprocessable();
-
-        $response->assertJsonValidationErrors([
-            'postal_code',
-        ]);
-
-        $response->assertJsonFragment([
-            'postal_code' => ['The postal code field format is invalid.'],
-        ]);
-    }
-
-    /**
-     * Test try create company with postal_code too tiny.
-     *
-     * @return void
-     */
-    public function testTryCreateCompanyWithPostalCodeTooTiny(): void
-    {
-        $this->actingAs($this->user);
-
-        $data = Company::factory([
-            'postal_code' => $this->faker->numerify(str_repeat('#', PostalCodeRules::LENGTH - 1))
-        ])->make()->toArray();
-
-        $response = $this->json('POST', 'api/companies', $data);
-
-        $response->assertUnprocessable();
-
-        $response->assertJsonValidationErrors([
-            'postal_code',
-        ]);
-
-        $response->assertJsonFragment([
-            'postal_code' => ['The postal code field must be ' . PostalCodeRules::LENGTH . ' characters.'],
-        ]);
-    }
-
-    /**
-     * Test try create company with postal_code too long.
-     *
-     * @return void
-     */
-    public function testTryCreateCompanyWithPostalCodeTooLong(): void
-    {
-        $this->actingAs($this->user);
-
-        $data = Company::factory([
-            'postal_code' => $this->faker->numerify(str_repeat('#', PostalCodeRules::LENGTH + 1))
-        ])->make()->toArray();
-
-        $response = $this->json('POST', 'api/companies', $data);
-
-        $response->assertUnprocessable();
-
-        $response->assertJsonValidationErrors([
-            'postal_code',
-        ]);
-
-        $response->assertJsonFragment([
-            'postal_code' => ['The postal code field must be ' . PostalCodeRules::LENGTH . ' characters.'],
-        ]);
-    }
-
-    /**
      * Test try create company without state.
      *
      * @return void
@@ -845,6 +741,84 @@ class CreateCompanyTest extends TestCase
 
         $response->assertJsonFragment([
             'state' => ['The selected state is invalid.'],
+        ]);
+    }
+
+    /** 
+     * Test try create company without city.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithoutCity(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'city' => null
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'city',
+        ]);
+
+        $response->assertJsonFragment([
+            'city' => ['The city field is required.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with city too tiny.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithCityTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'city' => Str::random(CityRules::MIN_LENGTH - 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'city',
+        ]);
+
+        $response->assertJsonFragment([
+            'city' => ['The city field must be at least ' . CityRules::MIN_LENGTH . ' characters.'],
+        ]);
+    }
+
+    /**
+     * Test try create company with city too long.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithCityTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory([
+            'city' => Str::random(CityRules::MAX_LENGTH + 1)
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'city',
+        ]);
+
+        $response->assertJsonFragment([
+            'city' => ['The city field must not be greater than ' . CityRules::MAX_LENGTH . ' characters.'],
         ]);
     }
 }

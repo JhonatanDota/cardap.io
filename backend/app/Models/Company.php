@@ -25,7 +25,6 @@ class Company extends Model
         'complement',
         'neighborhood',
         'city',
-        'postal_code',
         'state',
     ];
 
@@ -45,7 +44,6 @@ class Company extends Model
         'complement' => 'string',
         'neighborhood' => 'string',
         'city'     => 'string',
-        'postal_code' => 'string',
         'state'    => 'string',
     ];
 }

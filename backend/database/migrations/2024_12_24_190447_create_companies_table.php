@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('complement')->nullable();
             $table->string('neighborhood');
             $table->string('city');
-            $table->string('postal_code');
             $table->string('state');
 
             $table->timestamps();

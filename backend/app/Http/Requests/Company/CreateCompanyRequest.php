@@ -15,9 +15,9 @@ use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Address\StreetRules;
-use App\Rules\Fields\Address\PostalCodeRules;
 use App\Rules\Validations\PatternsValidation;
 use App\Rules\Fields\Address\ComplementRules;
+use App\Rules\Fields\Address\CityRules;
 use App\Rules\Fields\Address\NeighborhoodRules;
 use App\Rules\Fields\Address\NumberRules;
 
@@ -49,7 +49,7 @@ class CreateCompanyRequest extends FormRequest
             'number' => ['required', 'string', 'max:' . NumberRules::MAX_LENGTH],
             'complement' => ['nullable', 'string', 'max:' . ComplementRules::MAX_LENGTH],
             'neighborhood' => ['required', 'string', 'min:' . NeighborhoodRules::MIN_LENGTH, 'max:' . NeighborhoodRules::MAX_LENGTH],
-            'postal_code' => ['required', 'string', 'size:' . PostalCodeRules::LENGTH, 'regex:' . PatternsValidation::ONLY_DIGITS],
+            'city' => ['required', 'string', 'min:' . CityRules::MIN_LENGTH, 'max:' . CityRules::MAX_LENGTH],
             'state' => ['required', 'string', Rule::in(StatesEnum::values())],
         ];
     }
