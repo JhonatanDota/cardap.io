@@ -177,6 +177,36 @@ class CreateCompanyTest extends TestCase
     }
 
     /**
+     * Test try create company with duplicated cnpj.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithDuplicatedCnpj(): void
+    {
+        $this->actingAs($this->user);
+
+        $cnpj = $this->faker->numerify(str_repeat('#', CnpjRules::LENGTH));
+
+        Company::factory(['cnpj' => $cnpj])->create();
+
+        $data = Company::factory([
+            'cnpj' => $cnpj
+        ])->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'cnpj',
+        ]);
+
+        $response->assertJsonFragment([
+            'cnpj' => ['The cnpj has already been taken.'],
+        ]);
+    }
+
+    /**
      * Test try create company with cnpj too tiny.
      *
      * @return void
