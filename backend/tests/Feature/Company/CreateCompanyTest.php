@@ -851,4 +851,51 @@ class CreateCompanyTest extends TestCase
             'city' => ['The city field must not be greater than ' . CityRules::MAX_LENGTH . ' characters.'],
         ]);
     }
+
+    /**
+     * Test try create company successfully.
+     *
+     * @return void
+     */
+    public function testCreateCompanySuccessfully(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = Company::factory()->make()->toArray();
+
+        $response = $this->json('POST', 'api/companies', $data);
+
+        $response->assertCreated();
+
+        $response->assertJsonStructure([
+            'id',
+            'owner_id',
+            'name',
+            'cnpj',
+            'email',
+            'phone',
+            'street',
+            'number',
+            'complement',
+            'neighborhood',
+            'city',
+            'state',
+            'created_at',
+            'updated_at',
+        ]);
+
+        $response->assertJsonFragment([
+            'owner_id' => $this->user->id,
+            'name' => $data['name'],
+            'cnpj' => $data['cnpj'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'street' => $data['street'],
+            'number' => $data['number'],
+            'complement' => $data['complement'],
+            'neighborhood' => $data['neighborhood'],
+            'city' => $data['city'],
+            'state' => $data['state'],
+        ]);
+    }
 }

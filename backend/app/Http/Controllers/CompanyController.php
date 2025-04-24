@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
+
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\JsonResponse;
@@ -22,12 +24,19 @@ class CompanyController extends Controller
     /**
      * Create Company.
      *
+     * @param CreateCompanyRequest $request
      * @return JsonResponse
      */
 
     public function store(CreateCompanyRequest $request): JsonResponse
     {
-        //
+        $inputs = $request->validated();
+
+        $inputs['owner_id'] = Auth::user()->id;
+
+        $company = $this->companyRepository->create($inputs);
+
+        return response()->json($company, Response::HTTP_CREATED);
     }
 
     /**
