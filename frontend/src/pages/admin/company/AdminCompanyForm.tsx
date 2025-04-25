@@ -2,6 +2,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import toast from "react-hot-toast";
+
+import { statesEnumValues } from "../../../enums/statesEnum";
+
 import {
   CompanyModel,
   CreateCompanyModel,
@@ -19,6 +23,8 @@ import {
 import MenuPageSectionContainer from "../components/MenuPageSectionContainer";
 
 import TextInput from "../components/inputs/TextInput";
+import SelectInput from "../components/inputs/SelectInput";
+
 import MenuPageSectionTitle from "../components/MenuPageSectionTitle";
 import {
   cnpjMask,
@@ -60,6 +66,8 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
         cnpj: unmaskCnpj(data.cnpj),
         phone: unmaskPhone(data.phone),
       } as CreateCompanyModel);
+
+      toast.success("Empresa cadastrada com sucesso");
     } catch (error) {
       handleErrors(error);
     }
@@ -132,10 +140,10 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
               error={errors.city?.message}
             />
 
-            <TextInput
+            <SelectInput
               label="Estado"
+              options={statesEnumValues}
               register={register("state")}
-              error={errors.state?.message}
             />
           </div>
           <div className="mt-4 self-end">

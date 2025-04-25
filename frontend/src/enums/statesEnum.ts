@@ -27,3 +27,5 @@ export enum statesEnum {
   SE = "SE",
   TO = "TO",
 }
+
+export const statesEnumValues = Object.values(statesEnum);
