@@ -10,7 +10,7 @@ export type CompanyModel = {
   number: string;
   complement?: string | null;
   neighborhood: string;
-  postalCode: string;
+  city: string;
   state: statesEnum;
 };
 

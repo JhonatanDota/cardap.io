@@ -4,11 +4,18 @@ import { requester } from "./config";
 
 import { CompanyModel, CreateCompanyModel } from "../models/companyModels";
 
+import { isObjectEmpty } from "../utils/functions/helpers";
+
 const COMPANIES: string = "companies";
 const MY_COMPANY: string = "my-company";
 
 export async function myCompany(): Promise<AxiosResponse<CompanyModel | null>> {
-  return await requester().get(`${COMPANIES}/${MY_COMPANY}`);
+  const response = await requester().get(`${COMPANIES}/${MY_COMPANY}`);
+
+  return {
+    ...response,
+    data: isObjectEmpty(response.data) ? null : response.data,
+  };
 }
 
 export async function addCompany(

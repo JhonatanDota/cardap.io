@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -19,9 +20,15 @@ import MenuPageSectionContainer from "../components/MenuPageSectionContainer";
 
 import TextInput from "../components/inputs/TextInput";
 import MenuPageSectionTitle from "../components/MenuPageSectionTitle";
+import {
+  cnpjMask,
+  phoneMask,
+  unmaskCnpj,
+  unmaskPhone,
+} from "../../../utils/input/masks";
 
 interface AdminCompanyFormProps {
-  company?: CompanyModel;
+  company: CompanyModel | null;
 }
 
 export default function AdminCompanyForm(props: AdminCompanyFormProps) {
@@ -30,15 +37,29 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CompanySchemaType>({
     resolver: zodResolver(companySchemaData),
-    defaultValues: {},
   });
+
+  useEffect(() => {
+    if (company) {
+      reset({
+        ...company,
+        cnpj: cnpjMask(company.cnpj),
+        phone: phoneMask(company.phone),
+      });
+    }
+  }, [company, reset]);
 
   async function onSubmit(data: CompanySchemaType): Promise<void> {
     try {
-      await addCompany(data as CreateCompanyModel);
+      await addCompany({
+        ...data,
+        cnpj: unmaskCnpj(data.cnpj),
+        phone: unmaskPhone(data.phone),
+      } as CreateCompanyModel);
     } catch (error) {
       handleErrors(error);
     }
@@ -47,10 +68,10 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <MenuPageSectionContainer>
-        <div className="flex flex-col gap-3 md:w-2/3 md:border-2 md:p-4">
+        <div className="flex flex-col gap-3 lg:w-2/3 md:border-2 md:p-4">
           <MenuPageSectionTitle title="Informações Básicas" />
 
-          <div className="flex flex-col gap-3 md:grid md:grid-cols-2">
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
             <TextInput
               label="Nome"
               register={register("name")}
@@ -61,6 +82,7 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
               label="CNPJ"
               register={register("cnpj")}
               error={errors.cnpj?.message}
+              mask={cnpjMask}
             />
 
             <TextInput
@@ -73,12 +95,13 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
               label="Telefone"
               register={register("phone")}
               error={errors.phone?.message}
+              mask={phoneMask}
             />
           </div>
 
           <MenuPageSectionTitle title="Endereço" />
 
-          <div className="flex flex-col gap-3 md:grid md:grid-cols-2">
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
             <TextInput
               label="Rua"
               register={register("street")}
@@ -104,9 +127,9 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
             />
 
             <TextInput
-              label="CEP"
-              register={register("postalCode")}
-              error={errors.postalCode?.message}
+              label="Cidade"
+              register={register("city")}
+              error={errors.city?.message}
             />
 
             <TextInput
@@ -118,9 +141,9 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
           <div className="mt-4 self-end">
             <button
               type="submit"
-              className="font-bold px-6 py-2 bg-blue-600 text-white "
+              className="font-bold px-6 py-2 bg-blue-600 hover:bg-blueasds@asdas.com-700 text-white "
             >
-              Salvar
+              SALVAR
             </button>
           </div>
         </div>
