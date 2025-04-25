@@ -898,4 +898,37 @@ class CreateCompanyTest extends TestCase
             'state' => $data['state'],
         ]);
     }
+
+    /**
+     * Test try create company with user already has company.
+     *
+     * @return void
+     */
+    public function testTryCreateCompanyWithUserAlreadyHasCompany(): void
+    {
+        $this->actingAs($this->user);
+
+        // creating a company for the user  
+        $response = $this->json('POST', 'api/companies', Company::factory()->make()->toArray());
+
+        $response->assertCreated();
+
+        $response->assertJsonFragment([
+            'owner_id' => $this->user->id,
+        ]);
+
+        // trying to create another company for the same user
+        $response = $this->json('POST', 'api/companies', Company::factory()->make()->toArray());
+
+
+        $response->assertUnprocessable();
+
+        $response->assertJsonValidationErrors([
+            'owner_id',
+        ]);
+
+        $response->assertJsonFragment([
+            'owner_id' => ['The owner id has already been taken.'],
+        ]);
+    }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Http\Requests\Company;
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 use App\Enums\Address\StatesEnum;
 
 use Illuminate\Validation\Rule;
 
+use App\Models\User;
 use App\Models\Company;
 
 use App\Rules\Fields\Commom\CnpjRules;
@@ -41,6 +44,7 @@ class CreateCompanyRequest extends FormRequest
     public function rules()
     {
         return [
+            'owner_id' => ['required', Rule::exists(User::class, 'id'), Rule::unique(Company::class, 'owner_id')],
             'name' => ['required', 'string', 'min:' . NameRules::MIN_LENGTH, 'max:' . NameRules::MAX_LENGTH],
             'cnpj' => ['required', 'string', 'regex:' . PatternsValidation::ONLY_DIGITS, 'size:' . CnpjRules::LENGTH, Rule::unique(Company::class, 'cnpj')],
             'email' => ['required', 'string', 'email', 'max:' . EmailRules::MAX_LENGTH, 'regex:' . PatternsValidation::EMAIL_WITH_TLD,  Rule::unique(Company::class, 'email')],
@@ -52,5 +56,17 @@ class CreateCompanyRequest extends FormRequest
             'city' => ['required', 'string', 'min:' . CityRules::MIN_LENGTH, 'max:' . CityRules::MAX_LENGTH],
             'state' => ['required', 'string', Rule::in(StatesEnum::values())],
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'owner_id' => Auth::user()->id,
+        ]);
     }
 }

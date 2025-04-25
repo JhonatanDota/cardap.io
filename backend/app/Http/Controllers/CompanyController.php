@@ -32,8 +32,6 @@ class CompanyController extends Controller
     {
         $inputs = $request->validated();
 
-        $inputs['owner_id'] = Auth::user()->id;
-
         $company = $this->companyRepository->create($inputs);
 
         return response()->json($company, Response::HTTP_CREATED);
