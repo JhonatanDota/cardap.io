@@ -9,11 +9,15 @@ import { statesEnumValues } from "../../../enums/statesEnum";
 import {
   CompanyModel,
   CreateCompanyModel,
+  UpdateCompanyModel,
 } from "../../../models/companyModels";
 
 import { handleErrors } from "../../../requests/handleErrors";
 
-import { addCompany } from "../../../requests/companyRequests";
+import {
+  addCompany,
+  updateCompany as updateCompanyRequest,
+} from "../../../requests/companyRequests";
 
 import {
   CompanySchemaType,
@@ -60,6 +64,10 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
   }, [company, reset]);
 
   async function onSubmit(data: CompanySchemaType): Promise<void> {
+    await (company ? updateCompany(company.id, data) : createCompany(data));
+  }
+
+  async function createCompany(data: CompanySchemaType): Promise<void> {
     try {
       await addCompany({
         ...data,
@@ -73,10 +81,27 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
     }
   }
 
+  async function updateCompany(
+    companyId: number,
+    data: CompanySchemaType
+  ): Promise<void> {
+    try {
+      await updateCompanyRequest(companyId, {
+        ...data,
+        cnpj: unmaskCnpj(data.cnpj),
+        phone: unmaskPhone(data.phone),
+      } as UpdateCompanyModel);
+
+      toast.success("Empresa atualizada com sucesso");
+    } catch (error) {
+      handleErrors(error);
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <MenuPageSectionContainer>
-        <div className="flex flex-col gap-3 lg:w-2/3 md:border-2 md:p-4">
+        <div className="flex flex-col gap-3 md:p-4">
           <MenuPageSectionTitle title="Informações Básicas" />
 
           <div className="flex flex-col gap-4 md:grid md:grid-cols-2">

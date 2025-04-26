@@ -12,9 +12,9 @@ export default function SelectInput(props: SelectInputProps) {
 
   return (
     <div className="flex flex-col gap-1 text-lg md:text-xl">
-      <label className="font-medium">{label}</label>
+      <label className="font-normal">{label}</label>
       <select
-        className="border-[2px] font-medium border-gray-900 bg-white p-[0.600rem] shadow-sm rounded-sm focus:outline-none"
+        className="border-[2px] border-gray-200 font-medium bg-white p-[0.600rem] shadow-sm rounded-sm focus:outline-none"
         {...register}
       >
         {options.map((option) => (

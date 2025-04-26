@@ -12,7 +12,7 @@ interface TextInputProps {
 export default function TextInput(props: TextInputProps) {
   const { label, register, error, mask } = props;
 
-  const inputClassName = `border-[2px] font-medium border-gray-900 p-2 shadow-sm transition-colors duration-100 focus:border-purple-800 focus:outline-none ${
+  const inputClassName = `border-[2px] border-gray-200 font-medium p-2 focus:border-gray-900 focus:outline-none ${
     error ? "border-red-500" : ""
   }`;
 
@@ -26,7 +26,7 @@ export default function TextInput(props: TextInputProps) {
 
   return (
     <div className="flex flex-col gap-1 text-lg md:text-xl">
-      <label className="font-medium">{label}</label>
+      <label className="font-normal">{label}</label>
       <input
         type="text"
         className={inputClassName}

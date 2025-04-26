@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import Loading from "../../../components/loading/Loading";
+
 import { handleErrors } from "../../../requests/handleErrors";
 
 import { CompanyModel } from "../../../models/companyModels";
@@ -12,6 +14,7 @@ import MenuPageTitle from "../components/MenuPageTitle";
 import AdminCompanyForm from "./AdminCompanyForm";
 
 export default function AdminCompany() {
+  const [isLoading, setIsLoading] = useState(true);
   const [company, setCompany] = useState<CompanyModel | null>(null);
 
   useEffect(function () {
@@ -26,6 +29,8 @@ export default function AdminCompany() {
       setCompany(companyData);
     } catch (error) {
       handleErrors(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -33,7 +38,7 @@ export default function AdminCompany() {
     <MenuPageContainer>
       <MenuPageTitle title="Minha Empresa" />
 
-      <AdminCompanyForm company={company} />
+      {isLoading ? <Loading /> : <AdminCompanyForm company={company} />}
     </MenuPageContainer>
   );
 }

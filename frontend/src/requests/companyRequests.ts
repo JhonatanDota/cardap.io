@@ -2,7 +2,11 @@ import { AxiosResponse } from "axios";
 
 import { requester } from "./config";
 
-import { CompanyModel, CreateCompanyModel } from "../models/companyModels";
+import {
+  CompanyModel,
+  CreateCompanyModel,
+  UpdateCompanyModel,
+} from "../models/companyModels";
 
 import { isObjectEmpty } from "../utils/functions/helpers";
 
@@ -22,4 +26,11 @@ export async function addCompany(
   data: CreateCompanyModel
 ): Promise<AxiosResponse<CompanyModel>> {
   return await requester().post(`${COMPANIES}`, data);
+}
+
+export async function updateCompany(
+  id: number,
+  data: UpdateCompanyModel
+): Promise<AxiosResponse<CompanyModel>> {
+  return await requester().patch(`${COMPANIES}/${id}`, data);
 }

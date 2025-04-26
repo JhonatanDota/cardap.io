@@ -15,3 +15,5 @@ export type CompanyModel = {
 };
 
 export type CreateCompanyModel = Omit<CompanyModel, "id">;
+
+export type UpdateCompanyModel = Omit<CompanyModel, "id">;
