@@ -36,5 +36,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::prefix('companies')->group(function () {
         Route::post('/', [CompanyController::class, 'store']);
         Route::get('/my-company', [CompanyController::class, 'userCompany']);
+        Route::patch('/{company}', [CompanyController::class, 'update']);
     });
 });
