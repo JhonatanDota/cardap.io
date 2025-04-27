@@ -908,7 +908,6 @@ class CreateCompanyTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        // creating a company for the user  
         $response = $this->json('POST', 'api/companies', Company::factory()->make()->toArray());
 
         $response->assertCreated();
@@ -917,18 +916,12 @@ class CreateCompanyTest extends TestCase
             'owner_id' => $this->user->id,
         ]);
 
-        // trying to create another company for the same user
         $response = $this->json('POST', 'api/companies', Company::factory()->make()->toArray());
 
-
-        $response->assertUnprocessable();
-
-        $response->assertJsonValidationErrors([
-            'owner_id',
-        ]);
+        $response->assertForbidden();
 
         $response->assertJsonFragment([
-            'owner_id' => ['The owner id has already been taken.'],
+            'message' => 'This action is unauthorized.',
         ]);
     }
 }

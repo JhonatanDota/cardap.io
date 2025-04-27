@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use App\Enums\Address\StatesEnum;
-
 use Illuminate\Validation\Rule;
+
+use App\Enums\Address\StatesEnum;
 
 use App\Models\User;
 use App\Models\Company;
@@ -20,9 +20,9 @@ use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Validations\PatternsValidation;
 use App\Rules\Fields\Address\ComplementRules;
-use App\Rules\Fields\Address\CityRules;
 use App\Rules\Fields\Address\NeighborhoodRules;
 use App\Rules\Fields\Address\NumberRules;
+use App\Rules\Fields\Address\CityRules;
 
 class CreateCompanyRequest extends FormRequest
 {
@@ -33,7 +33,7 @@ class CreateCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create', Company::class);
     }
 
     /**
@@ -47,7 +47,7 @@ class CreateCompanyRequest extends FormRequest
             'owner_id' => ['required', Rule::exists(User::class, 'id'), Rule::unique(Company::class, 'owner_id')],
             'name' => ['required', 'string', 'min:' . NameRules::MIN_LENGTH, 'max:' . NameRules::MAX_LENGTH],
             'cnpj' => ['required', 'string', 'regex:' . PatternsValidation::ONLY_DIGITS, 'size:' . CnpjRules::LENGTH, Rule::unique(Company::class, 'cnpj')],
-            'email' => ['required', 'string', 'email', 'max:' . EmailRules::MAX_LENGTH, 'regex:' . PatternsValidation::EMAIL_WITH_TLD,  Rule::unique(Company::class, 'email')],
+            'email' => ['required', 'string', 'email', 'max:' . EmailRules::MAX_LENGTH, 'regex:' . PatternsValidation::EMAIL_WITH_TLD, Rule::unique(Company::class, 'email')],
             'phone' => ['required', 'string', 'regex:' . PatternsValidation::ONLY_DIGITS, 'size:' . PhoneRules::LENGTH],
             'street' => ['required', 'string', 'min:' . StreetRules::MIN_LENGTH, 'max:' . StreetRules::MAX_LENGTH],
             'number' => ['required', 'string', 'max:' . NumberRules::MAX_LENGTH],
