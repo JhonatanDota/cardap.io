@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
 use App\Http\Requests\Company\CreateCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
 
 use App\Repositories\CompanyRepository;
+
+use App\Models\Company;
 
 class CompanyController extends Controller
 {
@@ -49,5 +52,22 @@ class CompanyController extends Controller
         $company = $user->company;
 
         return response()->json($company);
+    }
+
+    /**
+     * Update Company.
+     *
+     * @param Company $company
+     * @param UpdateCompanyRequest $request
+     * @return JsonResponse
+     */
+
+    public function update(Company $company, UpdateCompanyRequest $request): JsonResponse
+    {
+        $inputs = $request->validated();
+
+        $company = $this->companyRepository->update($company, $inputs);
+
+        return response()->json($company, Response::HTTP_OK);
     }
 }
