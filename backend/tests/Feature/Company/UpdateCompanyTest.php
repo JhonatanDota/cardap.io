@@ -15,6 +15,7 @@ use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Fields\Address\NumberRules;
+use App\Rules\Fields\Address\ComplementRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -737,6 +738,33 @@ class UpdateCompanyTest extends TestCase
     }
 
     /**
+     * Test update company with valid street.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidStreet(): void
+    {
+        $this->actingAs($this->user);
+
+        $street = $this->faker->streetName;
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'street' => $street,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'street' => $street,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'street' => $street,
+        ]);
+    }
+
+    /**
      * Test update company with null number.
      *
      * @return void
@@ -755,13 +783,12 @@ class UpdateCompanyTest extends TestCase
         $response->assertJsonFragment([
             'number' => [
                 'The number field must be a string.',
-                'The number field must be ' . NumberRules::MAX_LENGTH . ' characters.',
             ],
         ]);
     }
 
     /**
-     * Test update company with empty number.
+     * Test try update company with empty number.
      *
      * @return void
      */
@@ -779,13 +806,12 @@ class UpdateCompanyTest extends TestCase
         $response->assertJsonFragment([
             'number' => [
                 'The number field must be a string.',
-                'The number field must be ' . NumberRules::MAX_LENGTH . ' characters.',
             ],
         ]);
     }
 
     /**
-     * Test update company with number too long.
+     * Test try update company with number too long.
      *
      * @return void
      */
@@ -804,6 +830,98 @@ class UpdateCompanyTest extends TestCase
             'number' => [
                 'The number field must not be greater than ' . NumberRules::MAX_LENGTH . ' characters.',
             ],
+        ]);
+    }
+
+    /**
+     * Test update company with valid number.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidNumber(): void
+    {
+        $this->actingAs($this->user);
+
+        $number = Str::random(NumberRules::MAX_LENGTH);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'number' => $number,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'number' => $number,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'number' => $number,
+        ]);
+    }
+
+    /**
+     * Test try update company with too long complement.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithTooLongComplement(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'complement' => Str::random(ComplementRules::MAX_LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['complement']);
+
+        $response->assertJsonFragment([
+            'complement' => [
+                'The complement field must not be greater than ' . ComplementRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with null complement.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullComplement(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'complement' => null,
+        ]);
+
+        $response->assertOk();
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'complement' => null,
+        ]);
+    }
+
+    /**
+     * Test update company with empty complement.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyComplement(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'complement' => '',
+        ]);
+
+        $response->assertOk();
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'complement' => null,
         ]);
     }
 }
