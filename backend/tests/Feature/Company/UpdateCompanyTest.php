@@ -13,6 +13,7 @@ use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Commom\PhoneRules;
+use App\Rules\Fields\Address\StreetRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -637,6 +638,100 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'phone' => $phone,
+        ]);
+    }
+
+    /**
+     * Test update company with null street.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullStreet(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'street' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['street']);
+
+        $response->assertJsonFragment([
+            'street' => [
+                'The street field must be a string.',
+                'The street field must be at least ' . StreetRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty street.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyStreet(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'street' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['street']);
+
+        $response->assertJsonFragment([
+            'street' => [
+                'The street field must be a string.',
+                'The street field must be at least ' . StreetRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with street too tiny.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithStreetTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'street' => Str::random(StreetRules::MIN_LENGTH - 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['street']);
+
+        $response->assertJsonFragment([
+            'street' => [
+                'The street field must be at least ' . StreetRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with street too long.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithStreetTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'street' => Str::random(StreetRules::MAX_LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['street']);
+
+        $response->assertJsonFragment([
+            'street' => [
+                'The street field must not be greater than ' . StreetRules::MAX_LENGTH . ' characters.',
+            ],
         ]);
     }
 }
