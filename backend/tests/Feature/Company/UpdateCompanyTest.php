@@ -16,6 +16,7 @@ use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Fields\Address\NumberRules;
 use App\Rules\Fields\Address\ComplementRules;
+use App\Rules\Fields\Address\NeighborhoodRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -922,6 +923,127 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'complement' => null,
+        ]);
+    }
+
+    /**
+     * Test update company with null neighborhood.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullNeighborhood(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'neighborhood' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['neighborhood']);
+
+        $response->assertJsonFragment([
+            'neighborhood' => [
+                'The neighborhood field must be a string.',
+                'The neighborhood field must be at least ' . NeighborhoodRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty neighborhood.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyNeighborhood(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'neighborhood' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['neighborhood']);
+
+        $response->assertJsonFragment([
+            'neighborhood' => [
+                'The neighborhood field must be a string.',
+                'The neighborhood field must be at least ' . NeighborhoodRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with neighborhood too tiny.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNeighborhoodTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'neighborhood' => Str::random(NeighborhoodRules::MIN_LENGTH - 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['neighborhood']);
+
+        $response->assertJsonFragment([
+            'neighborhood' => [
+                'The neighborhood field must be at least ' . NeighborhoodRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with too long neighborhood.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithTooLongNeighborhood(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'neighborhood' => Str::random(NeighborhoodRules::MAX_LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['neighborhood']);
+
+        $response->assertJsonFragment([
+            'neighborhood' => [
+                'The neighborhood field must not be greater than ' . NeighborhoodRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with valid neighborhood.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidNeighborhood(): void
+    {
+        $this->actingAs($this->user);
+
+        $neighborhood = $this->faker->streetSuffix;
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'neighborhood' => $neighborhood,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'neighborhood' => $neighborhood,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'neighborhood' => $neighborhood,
         ]);
     }
 }
