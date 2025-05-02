@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Company;
 
+use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Company\NameRules;
 
 class UpdateCompanyTest extends TestCase
@@ -188,6 +189,152 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'name' => $name,
+        ]);
+    }
+
+    /**
+     * Test try update company with null cnpj.
+     *
+     * @return void
+     */
+    public function testTryUpdateCompanyWithNullCnpj(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['cnpj']);
+
+        $response->assertJsonFragment([
+            'cnpj' => [
+                'The cnpj field must be a string.',
+                'The cnpj field format is invalid.',
+                'The cnpj field must be ' . CnpjRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test try update company with empty cnpj.
+     *
+     * @return void
+     */
+    public function testTryUpdateCompanyWithEmptyCnpj(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['cnpj']);
+
+        $response->assertJsonFragment([
+            'cnpj' => [
+                'The cnpj field must be a string.',
+                'The cnpj field format is invalid.',
+                'The cnpj field must be ' . CnpjRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test try update company with cnpj than contains letters.
+     *
+     * @return void
+     */
+    public function testTryUpdateCompanyWithCnpjThatContainsLetters(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => Str::random(CnpjRules::LENGTH),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['cnpj']);
+
+        $response->assertJsonFragment([
+            'cnpj' => [
+                'The cnpj field format is invalid.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test try update company with cnpj too tiny.
+     *
+     * @return void
+     */
+    public function testTryUpdateCompanyWithCnpjTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => Str::random(CnpjRules::LENGTH - 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['cnpj']);
+
+        $response->assertJsonFragment([
+            'cnpj' => [
+                'The cnpj field format is invalid.',
+                'The cnpj field must be ' . CnpjRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test try update company with cnpj too long.
+     *
+     * @return void
+     */
+    public function testTryUpdateCompanyWithCnpjTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => Str::random(CnpjRules::LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['cnpj']);
+
+        $response->assertJsonFragment([
+            'cnpj' => [
+                'The cnpj field format is invalid.',
+                'The cnpj field must be ' . CnpjRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test try update company with duplicated cnpj.
+     *
+     * @return void
+     */
+    public function testTryUpdateCompanyWithDuplicatedCnpj(): void
+    {
+        $this->actingAs($this->user);
+
+        $company = Company::factory()->create();
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => $company->cnpj,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['cnpj']);
+
+        $response->assertJsonFragment([
+            'cnpj' => [
+                'The cnpj has already been taken.',
+            ],
         ]);
     }
 }
