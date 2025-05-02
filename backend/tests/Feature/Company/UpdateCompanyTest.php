@@ -14,6 +14,7 @@ use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
 use App\Rules\Fields\Commom\PhoneRules;
 use App\Rules\Fields\Address\StreetRules;
+use App\Rules\Fields\Address\NumberRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -731,6 +732,77 @@ class UpdateCompanyTest extends TestCase
         $response->assertJsonFragment([
             'street' => [
                 'The street field must not be greater than ' . StreetRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with null number.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullNumber(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'number' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['number']);
+
+        $response->assertJsonFragment([
+            'number' => [
+                'The number field must be a string.',
+                'The number field must be ' . NumberRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty number.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyNumber(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'number' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['number']);
+
+        $response->assertJsonFragment([
+            'number' => [
+                'The number field must be a string.',
+                'The number field must be ' . NumberRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with number too long.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNumberTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'number' => Str::random(NumberRules::MAX_LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['number']);
+
+        $response->assertJsonFragment([
+            'number' => [
+                'The number field must not be greater than ' . NumberRules::MAX_LENGTH . ' characters.',
             ],
         ]);
     }
