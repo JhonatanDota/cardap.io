@@ -917,7 +917,7 @@ class UpdateCompanyTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $complement = $this->faker->sentence;
+        $complement = $this->faker->word();
 
         $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
             'complement' => $complement,
@@ -1293,6 +1293,63 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'state' => $state,
+        ]);
+    }
+
+    /**
+     * Test update full company.
+     *
+     * @return void
+     */
+    public function testUpdateFullCompany(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = [
+            'name' => $this->faker->name,
+            'cnpj' => $this->faker->numerify(str_repeat('#', CnpjRules::LENGTH)),
+            'email' => $this->faker->email,
+            'phone' => $this->faker->numerify(str_repeat('#', PhoneRules::LENGTH)),
+            'street' => $this->faker->streetAddress,
+            'number' => $this->faker->buildingNumber,
+            'complement' => $this->faker->optional()->word(),
+            'neighborhood' => $this->faker->streetSuffix(),
+            'city' => $this->faker->city,
+            'state' => $this->faker->randomElement(StatesEnum::values()),
+        ];
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, $data);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'id' => $this->company->id,
+            'name' => $data['name'],
+            'cnpj' => $data['cnpj'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'street' => $data['street'],
+            'number' => $data['number'],
+            'complement' => $data['complement'],
+            'neighborhood' => $data['neighborhood'],
+            'city' => $data['city'],
+            'state' => $data['state'],
+            'created_at' => $this->company->created_at,
+            'updated_at' => $this->company->updated_at,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'name' => $data['name'],
+            'cnpj' => $data['cnpj'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'street' => $data['street'],
+            'number' => $data['number'],
+            'complement' => $data['complement'],
+            'neighborhood' => $data['neighborhood'],
+            'city' => $data['city'],
+            'state' => $data['state'],
         ]);
     }
 }
