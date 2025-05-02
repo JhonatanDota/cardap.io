@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
+use App\Rules\Fields\Commom\PhoneRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -488,6 +489,154 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'email' => $email,
+        ]);
+    }
+
+    /**
+     * Test update company with null phone.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullPhone(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'phone' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['phone']);
+
+        $response->assertJsonFragment([
+            'phone' => [
+                'The phone field must be a string.',
+                'The phone field format is invalid.',
+                'The phone field must be ' . PhoneRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty phone.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyPhone(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'phone' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['phone']);
+
+        $response->assertJsonFragment([
+            'phone' => [
+                'The phone field must be a string.',
+                'The phone field format is invalid.',
+                'The phone field must be ' . PhoneRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with phone that contains letters.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithPhoneThatContainsLetters(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'phone' => Str::random(PhoneRules::LENGTH),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['phone']);
+
+        $response->assertJsonFragment([
+            'phone' => [
+                'The phone field format is invalid.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with phone too tiny.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithPhoneTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'phone' => Str::random(PhoneRules::LENGTH - 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['phone']);
+
+        $response->assertJsonFragment([
+            'phone' => [
+                'The phone field format is invalid.',
+                'The phone field must be ' . PhoneRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with phone too long.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithPhoneTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'phone' => Str::random(PhoneRules::LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['phone']);
+
+        $response->assertJsonFragment([
+            'phone' => [
+                'The phone field format is invalid.',
+                'The phone field must be ' . PhoneRules::LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with valid phone.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidPhone(): void
+    {
+        $this->actingAs($this->user);
+
+        $phone = $this->faker->numerify(str_repeat('#', PhoneRules::LENGTH));
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'phone' => $phone,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'phone' => $phone,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'phone' => $phone,
         ]);
     }
 }
