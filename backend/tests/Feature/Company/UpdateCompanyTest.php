@@ -17,6 +17,7 @@ use App\Rules\Fields\Address\StreetRules;
 use App\Rules\Fields\Address\NumberRules;
 use App\Rules\Fields\Address\ComplementRules;
 use App\Rules\Fields\Address\NeighborhoodRules;
+use App\Rules\Fields\Address\CityRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -1044,6 +1045,127 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'neighborhood' => $neighborhood,
+        ]);
+    }
+
+    /**
+     * Test update company with null city.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullCity(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'city' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['city']);
+
+        $response->assertJsonFragment([
+            'city' => [
+                'The city field must be a string.',
+                'The city field must be at least ' . CityRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty city.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyCity(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'city' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['city']);
+
+        $response->assertJsonFragment([
+            'city' => [
+                'The city field must be a string.',
+                'The city field must be at least ' . CityRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with city too tiny.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithCityTooTiny(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'city' => Str::random(CityRules::MIN_LENGTH - 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['city']);
+
+        $response->assertJsonFragment([
+            'city' => [
+                'The city field must be at least ' . CityRules::MIN_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with city too long.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithCityTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'city' => Str::random(CityRules::MAX_LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['city']);
+
+        $response->assertJsonFragment([
+            'city' => [
+                'The city field must not be greater than ' . CityRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with valid city.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidCity(): void
+    {
+        $this->actingAs($this->user);
+
+        $city = $this->faker->city;
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'city' => $city,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'city' => $city,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'city' => $city,
         ]);
     }
 }
