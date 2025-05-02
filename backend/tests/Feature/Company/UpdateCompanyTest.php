@@ -11,6 +11,7 @@ use App\Models\Company;
 
 use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Company\NameRules;
+use App\Rules\Fields\Commom\EmailRules;
 
 class UpdateCompanyTest extends TestCase
 {
@@ -335,6 +336,158 @@ class UpdateCompanyTest extends TestCase
             'cnpj' => [
                 'The cnpj has already been taken.',
             ],
+        ]);
+    }
+
+    /** Test update company with valid cnpj.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidCnpj(): void
+    {
+        $this->actingAs($this->user);
+
+        $cnpj = $this->faker->numerify(str_repeat('#', CnpjRules::LENGTH));
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'cnpj' => $cnpj,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'cnpj' => $cnpj,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'cnpj' => $cnpj,
+        ]);
+    }
+
+    /**
+     * Test update company with null email.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullEmail(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'email' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['email']);
+
+        $response->assertJsonFragment([
+            'email' => [
+                'The email field must be a string.',
+                'The email field must be a valid email address.',
+                'The email field format is invalid.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty email.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyEmail(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'email' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['email']);
+
+        $response->assertJsonFragment([
+            'email' => [
+                'The email field must be a string.',
+                'The email field must be a valid email address.',
+                'The email field format is invalid.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with invalid email.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithInvalidEmail(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'email' => 'invalid-email',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['email']);
+
+        $response->assertJsonFragment([
+            'email' => [
+                'The email field format is invalid.',
+                'The email field must be a valid email address.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with email too long.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmailTooLong(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'email' => Str::random(EmailRules::MAX_LENGTH + 1),
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['email']);
+
+        $response->assertJsonFragment([
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field format is invalid.',
+                'The email field must not be greater than ' . EmailRules::MAX_LENGTH . ' characters.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with valid email.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidEmail(): void
+    {
+        $this->actingAs($this->user);
+
+        $email = $this->faker->email;
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'email' => $email,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'email' => $email,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'email' => $email,
         ]);
     }
 }
