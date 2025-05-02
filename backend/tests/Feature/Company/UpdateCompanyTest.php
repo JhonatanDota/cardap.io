@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Company;
 
+use App\Enums\Address\StatesEnum;
+
 use App\Rules\Fields\Commom\CnpjRules;
 use App\Rules\Fields\Company\NameRules;
 use App\Rules\Fields\Commom\EmailRules;
@@ -906,6 +908,33 @@ class UpdateCompanyTest extends TestCase
         ]);
     }
 
+    /** 
+     * Test update company with valid complement.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidComplement(): void
+    {
+        $this->actingAs($this->user);
+
+        $complement = $this->faker->sentence;
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'complement' => $complement,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'complement' => $complement,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'complement' => $complement,
+        ]);
+    }
+
     /**
      * Test update company with empty complement.
      *
@@ -1166,6 +1195,104 @@ class UpdateCompanyTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
             'city' => $city,
+        ]);
+    }
+
+    /**
+     * Test update company with null state.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithNullState(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'state' => null,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['state']);
+
+        $response->assertJsonFragment([
+            'state' => [
+                'The state field must be a string.',
+                'The selected state is invalid.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with empty state.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithEmptyState(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'state' => '',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['state']);
+
+        $response->assertJsonFragment([
+            'state' => [
+                'The state field must be a string.',
+                'The selected state is invalid.',
+            ],
+        ]);
+    }
+
+    /** 
+     * Test update company with invalid state.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithInvalidState(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'state' => 'invalid',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['state']);
+
+        $response->assertJsonFragment([
+            'state' => [
+                'The selected state is invalid.',
+            ],
+        ]);
+    }
+
+    /**
+     * Test update company with valid state.
+     *
+     * @return void
+     */
+    public function testUpdateCompanyWithValidState(): void
+    {
+        $this->actingAs($this->user);
+
+        $state = $this->faker->randomElement(StatesEnum::values());
+
+        $response = $this->json('PATCH', 'api/companies/' . $this->company->id, [
+            'state' => $state,
+        ]);
+
+        $response->assertOk();
+
+        $response->assertJsonFragment([
+            'state' => $state,
+        ]);
+
+        $this->assertDatabaseHas('companies', [
+            'id' => $this->company->id,
+            'state' => $state,
         ]);
     }
 }
