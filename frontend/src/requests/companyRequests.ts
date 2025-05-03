@@ -2,6 +2,9 @@ import { AxiosResponse } from "axios";
 
 import { requester } from "./config";
 
+import { PaymentMethodEnum } from "../enums/payment";
+
+import CompanyPaymentMethodModel from "../models/companyPaymentMethodModels";
 import {
   CompanyModel,
   CreateCompanyModel,
@@ -12,6 +15,7 @@ import { isObjectEmpty } from "../utils/functions/helpers";
 
 const COMPANIES: string = "companies";
 const MY_COMPANY: string = "my-company";
+const PAYMENT_METHODS: string = "payment-methods";
 
 export async function myCompany(): Promise<AxiosResponse<CompanyModel | null>> {
   const response = await requester().get(`${COMPANIES}/${MY_COMPANY}`);
@@ -33,4 +37,19 @@ export async function updateCompany(
   data: UpdateCompanyModel
 ): Promise<AxiosResponse<CompanyModel>> {
   return await requester().patch(`${COMPANIES}/${id}`, data);
+}
+
+export async function getCompanyPaymentMethods(
+  id: number
+): Promise<AxiosResponse<CompanyPaymentMethodModel[]>> {
+  return await requester().get(`${COMPANIES}/${id}/${PAYMENT_METHODS}`);
+}
+
+export async function syncCompanyPaymentMethods(
+  id: number,
+  data: string[]
+): Promise<AxiosResponse<CompanyPaymentMethodModel[]>> {
+  return await requester().post(`${COMPANIES}/${id}/${PAYMENT_METHODS}`, {
+    methods: data,
+  });
 }

@@ -33,9 +33,7 @@ export default function PaymentMethod(props: PaymentMethodProps) {
             className="flex flex-row items-center gap-2 md:gap-3"
             key={index}
           >
-            <svg className="w-8 md:w-10 h-8 md:h-10">
-              {paymentMethodIconsMap[paymentMethod]}
-            </svg>
+            <svg className="w-8 md:w-10 h-8 md:h-10"></svg>
 
             <span className="text-sm md:text-lg">
               {PaymentMethodReadableEnum[paymentMethod]}

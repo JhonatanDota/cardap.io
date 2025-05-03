@@ -30,6 +30,8 @@ import TextInput from "../components/inputs/TextInput";
 import SelectInput from "../components/inputs/SelectInput";
 
 import MenuPageSectionTitle from "../components/MenuPageSectionTitle";
+import MenuPageTitle from "../components/MenuPageTitle";
+
 import {
   cnpjMask,
   phoneMask,
@@ -39,10 +41,11 @@ import {
 
 interface AdminCompanyFormProps {
   company: CompanyModel | null;
+  setCompany: (company: CompanyModel) => void;
 }
 
 export default function AdminCompanyForm(props: AdminCompanyFormProps) {
-  const { company } = props;
+  const { company, setCompany } = props;
 
   const {
     register,
@@ -69,12 +72,13 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
 
   async function createCompany(data: CompanySchemaType): Promise<void> {
     try {
-      await addCompany({
+      const companyResponse = await addCompany({
         ...data,
         cnpj: unmaskCnpj(data.cnpj),
         phone: unmaskPhone(data.phone),
       } as CreateCompanyModel);
 
+      setCompany(companyResponse.data);
       toast.success("Empresa cadastrada com sucesso");
     } catch (error) {
       handleErrors(error);
@@ -101,6 +105,8 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <MenuPageSectionContainer>
+        <MenuPageTitle title="Empresa" />
+
         <div className="flex flex-col gap-3 md:p-4">
           <MenuPageSectionTitle title="Informações Básicas" />
 

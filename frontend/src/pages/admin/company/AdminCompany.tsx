@@ -9,9 +9,9 @@ import { CompanyModel } from "../../../models/companyModels";
 import { myCompany } from "../../../requests/companyRequests";
 
 import MenuPageContainer from "../components/MenuPageContainer";
-import MenuPageTitle from "../components/MenuPageTitle";
 
 import AdminCompanyForm from "./AdminCompanyForm";
+import AdminPaymentMethods from "./PaymentMethod/AdminPaymentMethods";
 
 export default function AdminCompany() {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,9 +36,15 @@ export default function AdminCompany() {
 
   return (
     <MenuPageContainer>
-      <MenuPageTitle title="Minha Empresa" />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          <AdminCompanyForm company={company} setCompany={setCompany} />
 
-      {isLoading ? <Loading /> : <AdminCompanyForm company={company} />}
+          {company && <AdminPaymentMethods company={company} />}
+        </div>
+      )}
     </MenuPageContainer>
   );
 }
