@@ -345,7 +345,7 @@ class RegisterTest extends TestCase
         $this->assertArrayNotHasKey('password', $responseData);
         $this->assertArrayNotHasKey('password_confirmation', $responseData);
 
-        $this->assertDatabaseHas('users', [
+        $this->assertDatabaseHas(User::class, [
             'email' => $userData['email'],
         ]);
     }

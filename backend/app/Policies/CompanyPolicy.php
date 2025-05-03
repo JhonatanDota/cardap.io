@@ -33,4 +33,16 @@ class CompanyPolicy
     {
         return $user->id == $company->owner_id;
     }
+
+    /**
+     * Determine whether the user can sync the company payment method.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Company  $company
+     * @return bool
+     */
+    public function syncPaymentMethod(User $user, Company $company): bool
+    {
+        return $user->id == $company->owner_id;
+    }
 }

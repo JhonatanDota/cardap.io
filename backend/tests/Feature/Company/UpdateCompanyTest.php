@@ -195,7 +195,7 @@ class UpdateCompanyTest extends TestCase
             'name' => $name,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'name' => $name,
         ]);
@@ -367,7 +367,7 @@ class UpdateCompanyTest extends TestCase
             'cnpj' => $cnpj,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'cnpj' => $cnpj,
         ]);
@@ -493,7 +493,7 @@ class UpdateCompanyTest extends TestCase
             'email' => $email,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'email' => $email,
         ]);
@@ -641,7 +641,7 @@ class UpdateCompanyTest extends TestCase
             'phone' => $phone,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'phone' => $phone,
         ]);
@@ -762,7 +762,7 @@ class UpdateCompanyTest extends TestCase
             'street' => $street,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'street' => $street,
         ]);
@@ -858,7 +858,7 @@ class UpdateCompanyTest extends TestCase
             'number' => $number,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'number' => $number,
         ]);
@@ -902,7 +902,7 @@ class UpdateCompanyTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'complement' => null,
         ]);
@@ -929,7 +929,7 @@ class UpdateCompanyTest extends TestCase
             'complement' => $complement,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'complement' => $complement,
         ]);
@@ -950,7 +950,7 @@ class UpdateCompanyTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'complement' => null,
         ]);
@@ -1071,7 +1071,7 @@ class UpdateCompanyTest extends TestCase
             'neighborhood' => $neighborhood,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'neighborhood' => $neighborhood,
         ]);
@@ -1192,7 +1192,7 @@ class UpdateCompanyTest extends TestCase
             'city' => $city,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'city' => $city,
         ]);
@@ -1290,7 +1290,7 @@ class UpdateCompanyTest extends TestCase
             'state' => $state,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'state' => $state,
         ]);
@@ -1338,7 +1338,7 @@ class UpdateCompanyTest extends TestCase
             'updated_at' => $this->company->updated_at,
         ]);
 
-        $this->assertDatabaseHas('companies', [
+        $this->assertDatabaseHas(Company::class, [
             'id' => $this->company->id,
             'name' => $data['name'],
             'cnpj' => $data['cnpj'],
