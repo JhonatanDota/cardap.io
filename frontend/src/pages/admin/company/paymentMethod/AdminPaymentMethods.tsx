@@ -21,6 +21,8 @@ import { paymentMethodsConstant } from "../../../../constants/payment/paymentMet
 
 import AdminPaymentMethodCard from "./AdminPaymentMethodCard";
 
+import SubmitButton from "../../components/buttons/SubmitButton";
+
 interface AdminCompanyPaymentMethodsFormProps {
   company: CompanyModel;
 }
@@ -74,7 +76,7 @@ export default function AdminPaymentMethods(
     <MenuPageSectionContainer>
       <MenuPageTitle title="Formas de Pagamento" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           {paymentMethodsConstant.map((paymentMethod) => (
             <AdminPaymentMethodCard
@@ -86,12 +88,7 @@ export default function AdminPaymentMethods(
         </div>
 
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded-md"
-          >
-            Salvar
-          </button>
+          <SubmitButton />
         </div>
       </form>
     </MenuPageSectionContainer>

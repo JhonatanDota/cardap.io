@@ -11,7 +11,7 @@ import { myCompany } from "../../../requests/companyRequests";
 import MenuPageContainer from "../components/MenuPageContainer";
 
 import AdminCompanyForm from "./AdminCompanyForm";
-import AdminPaymentMethods from "./PaymentMethod/AdminPaymentMethods";
+import AdminPaymentMethods from "./paymentMethod/AdminPaymentMethods";
 
 export default function AdminCompany() {
   const [isLoading, setIsLoading] = useState(true);

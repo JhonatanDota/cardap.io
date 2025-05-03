@@ -32,6 +32,8 @@ import SelectInput from "../components/inputs/SelectInput";
 import MenuPageSectionTitle from "../components/MenuPageSectionTitle";
 import MenuPageTitle from "../components/MenuPageTitle";
 
+import SubmitButton from "../components/buttons/SubmitButton";
+
 import {
   cnpjMask,
   phoneMask,
@@ -178,12 +180,7 @@ export default function AdminCompanyForm(props: AdminCompanyFormProps) {
             />
           </div>
           <div className="mt-4 self-end">
-            <button
-              type="submit"
-              className="font-bold px-6 py-2 bg-blue-600 hover:bg-blueasds@asdas.com-700 text-white "
-            >
-              SALVAR
-            </button>
+            <SubmitButton />
           </div>
         </div>
       </MenuPageSectionContainer>
