@@ -18,7 +18,7 @@ export default function AdminPaymentMethodCard(props: PaymentMethodCardProps) {
       </div>
 
       <input
-        className="absolute right-5 top-1/2 -translate-y-1/2 w-8 h-8 cursor-pointer checked:bg-green-500"
+        className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 cursor-pointer"
         type="checkbox"
         {...register}
       />

@@ -77,7 +77,7 @@ export default function AdminPaymentMethods(
       <MenuPageTitle title="Formas de Pagamento" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+        <div className="grid md:grid-cols-2 gap-4">
           {paymentMethodsConstant.map((paymentMethod) => (
             <AdminPaymentMethodCard
               key={paymentMethod.slug}

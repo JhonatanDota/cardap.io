@@ -30,7 +30,7 @@ export default function TextInput(props: TextInputProps) {
       <input
         type="text"
         className={inputClassName}
-        autoComplete="off"
+        autoComplete="nope"
         {...register}
         onChange={handleChange}
       />

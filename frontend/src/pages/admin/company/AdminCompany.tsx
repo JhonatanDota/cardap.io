@@ -12,6 +12,7 @@ import MenuPageContainer from "../components/MenuPageContainer";
 
 import AdminCompanyForm from "./AdminCompanyForm";
 import AdminPaymentMethods from "./paymentMethod/AdminPaymentMethods";
+import AdminOpeningHours from "./openingHours/AdminOpeningHours";
 
 export default function AdminCompany() {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,10 +40,14 @@ export default function AdminCompany() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-1 gap-4">
-          <AdminCompanyForm company={company} setCompany={setCompany} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="col-span-1 md:col-span-2">
+            <AdminCompanyForm company={company} setCompany={setCompany} />
+          </div>
 
           {company && <AdminPaymentMethods company={company} />}
+
+          {company && <AdminOpeningHours />}
         </div>
       )}
     </MenuPageContainer>
