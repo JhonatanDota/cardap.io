@@ -1,6 +1,13 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  SyncPaymentMethodSchemaType,
+  syncPaymentMethodSchemaData,
+} from "../../forms/schemas/company/syncPaymentMethod";
 
 import { toast } from "react-hot-toast";
 import { CompanyModel } from "../../../../models/companyModels";
@@ -22,29 +29,31 @@ import { paymentMethodsConstant } from "../../../../constants/payment/paymentMet
 import AdminPaymentMethodCard from "./AdminPaymentMethodCard";
 
 import SubmitButton from "../../components/buttons/SubmitButton";
-
 interface AdminCompanyPaymentMethodsFormProps {
   company: CompanyModel;
 }
-
-type PaymentMethodsFormType = {
-  [key in PaymentMethodEnum]?: boolean;
-};
 
 export default function AdminPaymentMethods(
   props: AdminCompanyPaymentMethodsFormProps
 ) {
   const { company } = props;
 
-  const { register, handleSubmit, reset } = useForm<PaymentMethodsFormType>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SyncPaymentMethodSchemaType>({
+    resolver: zodResolver(syncPaymentMethodSchemaData),
+  });
 
   useEffect(() => {
     fetchPaymentMethods();
   }, []);
 
-  async function onSubmit(data: PaymentMethodsFormType): Promise<void> {
-    const checkedPaymentMethods = Object.keys(data).filter(
-      (key) => data[key as PaymentMethodEnum]
+  async function onSubmit(data: SyncPaymentMethodSchemaType): Promise<void> {
+    const checkedPaymentMethods = Object.keys(data.paymentMethods).filter(
+      (key) => data.paymentMethods[key as PaymentMethodEnum]
     );
 
     try {
@@ -60,10 +69,12 @@ export default function AdminPaymentMethods(
       const response = await getCompanyPaymentMethods(company.id);
       const methods = response.data;
 
-      const defaultValues: PaymentMethodsFormType = {};
+      const defaultValues: SyncPaymentMethodSchemaType = {
+        paymentMethods: {},
+      };
 
       methods.forEach((method) => {
-        defaultValues[method.paymentMethod] = true;
+        defaultValues.paymentMethods[method.paymentMethod] = true;
       });
 
       reset(defaultValues);
@@ -82,10 +93,15 @@ export default function AdminPaymentMethods(
             <AdminPaymentMethodCard
               key={paymentMethod.slug}
               paymentMethod={paymentMethod}
-              register={register(paymentMethod.slug)}
+              register={register(`paymentMethods.${paymentMethod.slug}`)}
             />
           ))}
         </div>
+        {errors.paymentMethods && (
+          <p className="text-center text-red-500 text-sm md:text-base">
+            {(errors.paymentMethods as { message?: string })?.message}
+          </p>
+        )}
 
         <div className="flex justify-end">
           <SubmitButton />
