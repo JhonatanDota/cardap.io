@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CompanyPaymentMethod extends Model
+class CompanyOpeningHour extends Model
 {
     use HasFactory;
-
     /**
      * Disable timestamps.
      */
@@ -18,11 +17,13 @@ class CompanyPaymentMethod extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'company_id',
-        'payment_method',
+        'week_day',
+        'opening_hour',
+        'closing_hour',
     ];
 
     /**
@@ -32,11 +33,13 @@ class CompanyPaymentMethod extends Model
      */
     protected $casts = [
         'company_id' => 'integer',
-        'payment_method' => 'string',
+        'week_day' => 'string',
+        'opening_hour' => 'string',
+        'closing_hour' => 'string',
     ];
 
     /**
-     * Get the company that owns the payment method.
+     * Get the company that owns the opening hour.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyPaymentMethodController;
+use App\Http\Controllers\CompanyOpeningHourController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,6 +35,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 // =========================================================================
 
 Route::prefix('companies')->group(function () {
+    Route::get('/{company}/opening-hours', [CompanyOpeningHourController::class, 'show']);
     Route::get('/{company}/payment-methods', [CompanyPaymentMethodController::class, 'show']);
 
     Route::group(['middleware' => ['jwt.auth']], function () {

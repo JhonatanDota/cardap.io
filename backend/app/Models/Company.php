@@ -56,4 +56,13 @@ class Company extends Model
     {
         return $this->hasMany(CompanyPaymentMethod::class);
     }
+
+    /** Get Opening Hours
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function openingHours(): HasMany
+    {
+        return $this->hasMany(CompanyOpeningHour::class);
+    }
 }

@@ -77,7 +77,7 @@ class ListCompanyPaymentMethodTest extends TestCase
         $response = $this->json('GET', 'api/companies/' . $company->id . '/payment-methods');
 
         $response->assertOk();
-        $response->assertJsonFragment([]);
+        $response->assertExactJson([]);
         $response->assertJsonCount(0);
     }
 
