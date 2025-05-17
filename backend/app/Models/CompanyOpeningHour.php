@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CompanyOpeningHour extends Model
 {
     use HasFactory;
+    
     /**
      * Disable timestamps.
      */
@@ -22,8 +23,8 @@ class CompanyOpeningHour extends Model
     protected $fillable = [
         'company_id',
         'week_day',
-        'opening_hour',
-        'closing_hour',
+        'open_hour',
+        'close_hour',
     ];
 
     /**
@@ -34,8 +35,8 @@ class CompanyOpeningHour extends Model
     protected $casts = [
         'company_id' => 'integer',
         'week_day' => 'string',
-        'opening_hour' => 'string',
-        'closing_hour' => 'string',
+        'open_hour' => 'string',
+        'close_hour' => 'string',
     ];
 
     /**

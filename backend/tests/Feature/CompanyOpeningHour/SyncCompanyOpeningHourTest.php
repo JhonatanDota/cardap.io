@@ -82,13 +82,13 @@ class SyncCompanyOpeningHourTest extends TestCase
             'opening_hours' => [
                 [
                     'week_day' => WeekDaysEnum::FRIDAY->value,
-                    'opening_hour' => '21:00',
-                    'closing_hour' => '23:00',
+                    'open_hour' => '21:00',
+                    'close_hour' => '23:00',
                 ],
                 [
                     'week_day' => 'UNKNOWN',
-                    'opening_hour' => '22:00',
-                    'closing_hour' => '23:00',
+                    'open_hour' => '22:00',
+                    'close_hour' => '23:00',
                 ],
             ]
         ]);
@@ -103,7 +103,7 @@ class SyncCompanyOpeningHourTest extends TestCase
     }
 
     /**
-     * Test try sync company opening hour with invalid opening hour.
+     * Test try sync company opening hour with invalid open hour.
      *
      * @return void
      */
@@ -115,13 +115,13 @@ class SyncCompanyOpeningHourTest extends TestCase
             'opening_hours' => [
                 [
                     'week_day' => WeekDaysEnum::FRIDAY->value,
-                    'opening_hour' => 'UNKNOWN',
-                    'closing_hour' => '23:00',
+                    'open_hour' => 'UNKNOWN',
+                    'close_hour' => '23:00',
                 ],
                 [
                     'week_day' => WeekDaysEnum::SATURDAY->value,
-                    'opening_hour' => '22:00',
-                    'closing_hour' => '23:00',
+                    'open_hour' => '22:00',
+                    'close_hour' => '23:00',
                 ],
             ]
         ]);
@@ -129,14 +129,14 @@ class SyncCompanyOpeningHourTest extends TestCase
         $response->assertUnprocessable();
         $response->assertJsonCount(1, 'errors');
         $response->assertJsonValidationErrors([
-            'opening_hours.0.opening_hour' => [
-                'The opening_hours.0.opening_hour field must match the format H:i.'
+            'opening_hours.0.open_hour' => [
+                'The opening_hours.0.open_hour field must match the format H:i.'
             ]
         ]);
     }
 
     /**
-     * Test try sync company opening hour with invalid closing hour.
+     * Test try sync company opening hour with invalid close hour.
      *
      * @return void
      */
@@ -148,13 +148,13 @@ class SyncCompanyOpeningHourTest extends TestCase
             'opening_hours' => [
                 [
                     'week_day' => WeekDaysEnum::FRIDAY->value,
-                    'opening_hour' => '23:00',
-                    'closing_hour' => 'UNKNOWN',
+                    'open_hour' => '23:00',
+                    'close_hour' => 'UNKNOWN',
                 ],
                 [
                     'week_day' => WeekDaysEnum::SATURDAY->value,
-                    'opening_hour' => '22:00',
-                    'closing_hour' => '23:00',
+                    'open_hour' => '22:00',
+                    'close_hour' => '23:00',
                 ],
             ]
         ]);
@@ -162,8 +162,8 @@ class SyncCompanyOpeningHourTest extends TestCase
         $response->assertUnprocessable();
         $response->assertJsonCount(1, 'errors');
         $response->assertJsonValidationErrors([
-            'opening_hours.0.closing_hour' => [
-                'The opening_hours.0.closing_hour field must match the format H:i.'
+            'opening_hours.0.close_hour' => [
+                'The opening_hours.0.close_hour field must match the format H:i.'
             ]
         ]);
     }

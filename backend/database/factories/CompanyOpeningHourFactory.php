@@ -20,8 +20,8 @@ class CompanyOpeningHourFactory extends Factory
         return [
             'company_id' => Company::factory(),
             'week_day' => $this->faker->randomElement(WeekDaysEnum::cases()),
-            'opening_hour' => $this->faker->time('H:i'),
-            'closing_hour' => $this->faker->time('H:i'),
+            'open_hour' => $this->faker->time('H:i'),
+            'close_hour' => $this->faker->time('H:i'),
         ];
     }
 }

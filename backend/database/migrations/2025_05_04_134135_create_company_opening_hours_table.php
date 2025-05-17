@@ -27,8 +27,8 @@ return new class extends Migration
                 'SATURDAY',
             ]);
 
-            $table->time('opening_hour');
-            $table->time('closing_hour');
+            $table->time('open_hour');
+            $table->time('close_hour');
         });
     }
 

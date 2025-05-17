@@ -96,8 +96,8 @@ class ListCompanyOpeningHourTest extends TestCase
                 'id',
                 'company_id',
                 'week_day',
-                'opening_hour',
-                'closing_hour',
+                'open_hour',
+                'close_hour',
             ]
         ]);
         $response->assertJsonCount($openingHourCount);

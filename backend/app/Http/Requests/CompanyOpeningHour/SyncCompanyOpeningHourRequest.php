@@ -28,8 +28,8 @@ class SyncCompanyOpeningHourRequest extends FormRequest
         return [
             'opening_hours' => ['required', 'array',],
             'opening_hours.*.week_day' => ['required', 'string', new WeekDayRules],
-            'opening_hours.*.opening_hour' => ['required', 'date_format:H:i', 'string'],
-            'opening_hours.*.closing_hour' => ['required', 'date_format:H:i', 'string'],
+            'opening_hours.*.open_hour' => ['required', 'date_format:H:i', 'string'],
+            'opening_hours.*.close_hour' => ['required', 'date_format:H:i', 'string'],
         ];
     }
 }
