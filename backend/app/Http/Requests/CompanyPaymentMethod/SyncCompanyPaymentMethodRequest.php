@@ -7,8 +7,13 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\Validations\ArrayDuplicatedValuesValidation;
 use App\Rules\CompanyPaymentMethod\ValidPaymentMethodsValidation;
 
-class SyncCompanyPaymentMethod extends FormRequest
+class SyncCompanyPaymentMethodRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return $this->user()->can('syncPaymentMethod', $this->company);

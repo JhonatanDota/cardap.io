@@ -9,7 +9,7 @@ use App\Repositories\CompanyPaymentMethodRepository as Repository;
 
 use App\Models\Company;
 
-use App\Http\Requests\CompanyPaymentMethod\SyncCompanyPaymentMethod;
+use App\Http\Requests\CompanyPaymentMethod\SyncCompanyPaymentMethodRequest;
 
 class CompanyPaymentMethodController extends Controller
 {
@@ -42,7 +42,7 @@ class CompanyPaymentMethodController extends Controller
      * @return JsonResponse
      */
 
-    public function sync(Company $company, SyncCompanyPaymentMethod $request): JsonResponse
+    public function sync(Company $company, SyncCompanyPaymentMethodRequest $request): JsonResponse
     {
         $methods = $request->validated()['methods'];
         $paymentMethods = $this->repository->sync($company, $methods);
