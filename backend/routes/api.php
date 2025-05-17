@@ -44,5 +44,6 @@ Route::prefix('companies')->group(function () {
         Route::patch('/{company}', [CompanyController::class, 'update']);
 
         Route::post('/{company}/payment-methods', [CompanyPaymentMethodController::class, 'sync']);
+        Route::post('/{company}/opening-hours', [CompanyOpeningHourController::class, 'sync']);
     });
 });

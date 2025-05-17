@@ -6,6 +6,8 @@ use App\Models\Company;
 
 use App\Repositories\CompanyOpeningHourRepository;
 
+use App\Http\Requests\CompanyOpeningHour\SyncCompanyOpeningHourRequest;
+
 class CompanyOpeningHourController extends Controller
 {
     private CompanyOpeningHourRepository $companyOpeningHourRepository;
@@ -26,5 +28,18 @@ class CompanyOpeningHourController extends Controller
         $openingHours = $this->companyOpeningHourRepository->fromCompany($company);
 
         return response()->json($openingHours);
+    }
+
+    /**
+     * Sync the opening hours of a company.
+     *
+     * @param Company $company
+     * @param SyncCompanyOpeningHourRequest $request
+     * @return JsonResponse
+     */
+    public function sync(Company $company, SyncCompanyOpeningHourRequest $request)
+    {
+        dd($request->validated());
+        $this->companyOpeningHourRepository->sync($company, $request->all());
     }
 }

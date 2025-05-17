@@ -45,4 +45,16 @@ class CompanyPolicy
     {
         return $user->id == $company->owner_id;
     }
+
+    /**
+     * Determine whether the user can sync the company opening hour.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Company  $company
+     * @return bool
+     */
+    public function syncOpeningHour(User $user, Company $company): bool
+    {
+        return $user->id == $company->owner_id;
+    }
 }
