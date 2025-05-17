@@ -5,6 +5,7 @@ namespace App\Http\Requests\CompanyOpeningHour;
 use Illuminate\Foundation\Http\FormRequest;
 
 use App\Rules\Fields\Date\WeekDayRules;
+use App\Rules\CompanyOpeningHour\DuplicatedWeekDayValidation;
 
 class SyncCompanyOpeningHourRequest extends FormRequest
 {
@@ -26,7 +27,7 @@ class SyncCompanyOpeningHourRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'opening_hours' => ['required', 'array',],
+            'opening_hours' => ['required', 'array', new DuplicatedWeekDayValidation],
             'opening_hours.*.week_day' => ['required', 'string', new WeekDayRules],
             'opening_hours.*.open_hour' => ['required', 'date_format:H:i', 'string'],
             'opening_hours.*.close_hour' => ['required', 'date_format:H:i', 'string'],

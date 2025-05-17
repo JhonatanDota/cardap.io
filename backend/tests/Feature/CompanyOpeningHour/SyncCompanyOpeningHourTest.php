@@ -103,11 +103,44 @@ class SyncCompanyOpeningHourTest extends TestCase
     }
 
     /**
+     * Test try sync company opening hour with duplicated week day.
+     *
+     * @return void
+     */
+    public function testTrySyncCompanyOpeningHourWithDuplicatedWeekDay(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('POST', 'api/companies/' . $this->company->id . '/opening-hours', [
+            'opening_hours' => [
+                [
+                    'week_day' => WeekDaysEnum::FRIDAY->value,
+                    'open_hour' => '21:00',
+                    'close_hour' => '23:00',
+                ],
+                [
+                    'week_day' => WeekDaysEnum::FRIDAY->value,
+                    'open_hour' => '22:00',
+                    'close_hour' => '23:00',
+                ],
+            ]
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonCount(1, 'errors');
+        $response->assertJsonValidationErrors([
+            'opening_hours' => [
+                'The opening hours has duplicated week day.'
+            ]
+        ]);
+    }
+
+    /**
      * Test try sync company opening hour with invalid open hour.
      *
      * @return void
      */
-    public function testTrySyncCompanyOpeningHourWithInvalidOpeningHour(): void
+    public function testTrySyncCompanyOpeningHourWithInvalidOpenHour(): void
     {
         $this->actingAs($this->user);
 
@@ -140,7 +173,7 @@ class SyncCompanyOpeningHourTest extends TestCase
      *
      * @return void
      */
-    public function testTrySyncCompanyOpeningHourWithInvalidClosingHour(): void
+    public function testTrySyncCompanyOpeningHourWithInvalidCloseHour(): void
     {
         $this->actingAs($this->user);
 
