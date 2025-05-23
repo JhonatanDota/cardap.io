@@ -1,11 +1,9 @@
 import { weekDayEnum } from "../enums/date/week";
 
-export type OpeningHourModel = {
+export type CompanyOpeningHourModel = {
   weekDay: weekDayEnum;
   range: {
     init: string;
     end: string;
   };
 };
-
-export type OpeningHoursModel = OpeningHourModel[];

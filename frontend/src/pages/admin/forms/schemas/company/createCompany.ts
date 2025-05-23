@@ -23,7 +23,7 @@ export const companySchemaData = z.object({
 
   state: z.enum(Object.values(statesEnum) as [string, ...string[]], {
     errorMap: () => ({ message: "Estado inválido" }),
-  }),
+  }), //TODO: Trocar para nativeEnum
 });
 
 export type CompanySchemaType = z.infer<typeof companySchemaData>;

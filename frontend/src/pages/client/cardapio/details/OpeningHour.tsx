@@ -1,8 +1,8 @@
-import { OpeningHoursModel } from "../../../../models/openingHoursModels";
+import { CompanyOpeningHourModel } from "../../../../models/CompanyOpeningHoursModels";
 import { weekDayAcronymReadableEnum } from "../../../../enums/date/week";
 
 interface OpeningHourProps {
-  openingHours: OpeningHoursModel;
+  openingHours: CompanyOpeningHourModel[];
 }
 
 export default function OpeningHour(props: OpeningHourProps) {

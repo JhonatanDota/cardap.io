@@ -1,4 +1,4 @@
-import { OpeningHoursModel } from "../../../../models/openingHoursModels";
+import { CompanyOpeningHourModel } from "../../../../models/CompanyOpeningHoursModels";
 import { PaymentMethodsModel } from "../../../../models/paymentMethodModels";
 
 import PaymentMethod from "./PaymentMethod";
@@ -6,7 +6,7 @@ import OpeningHour from "./OpeningHour";
 
 interface CardapioDetailsProps {
   paymentMethods: PaymentMethodsModel;
-  openingHours: OpeningHoursModel;
+  openingHours: CompanyOpeningHourModel[];
 }
 
 export default function CardapioDetails(props: CardapioDetailsProps) {
