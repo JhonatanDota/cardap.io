@@ -47,7 +47,7 @@ export default function AdminCompany() {
 
           {company && <AdminPaymentMethods company={company} />}
 
-          {company && <AdminOpeningHours />}
+          {company && <AdminOpeningHours company={company} />}
         </div>
       )}
     </MenuPageContainer>
