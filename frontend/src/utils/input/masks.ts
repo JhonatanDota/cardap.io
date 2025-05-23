@@ -27,6 +27,13 @@ export const phoneMask: MaskFunction = (value: string) => {
     .slice(0, 15);
 };
 
+export const timeMask: MaskFunction = (value: string) => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/^(\d{2})(\d)/, "$1:$2")
+    .slice(0, 5);
+};
+
 export const unmask: MaskFunction = (value: string) => {
   return value.replace(/\D/g, "");
 };
