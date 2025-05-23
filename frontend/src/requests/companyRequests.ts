@@ -2,9 +2,8 @@ import { AxiosResponse } from "axios";
 
 import { requester } from "./config";
 
-import { PaymentMethodEnum } from "../enums/payment";
-
 import CompanyPaymentMethodModel from "../models/companyPaymentMethodModels";
+import { CompanyOpeningHourModel } from "../models/CompanyOpeningHoursModels";
 import {
   CompanyModel,
   CreateCompanyModel,
@@ -16,6 +15,7 @@ import { isObjectEmpty } from "../utils/functions/helpers";
 const COMPANIES: string = "companies";
 const MY_COMPANY: string = "my-company";
 const PAYMENT_METHODS: string = "payment-methods";
+const OPENING_HOURS: string = "opening-hours";
 
 export async function myCompany(): Promise<AxiosResponse<CompanyModel | null>> {
   const response = await requester().get(`${COMPANIES}/${MY_COMPANY}`);
@@ -52,4 +52,10 @@ export async function syncCompanyPaymentMethods(
   return await requester().post(`${COMPANIES}/${id}/${PAYMENT_METHODS}`, {
     methods: data,
   });
+}
+
+export async function getCompanyOpeningHours(
+  id: number
+): Promise<AxiosResponse<CompanyOpeningHourModel[]>> {
+  return await requester().get(`${COMPANIES}/${id}/${OPENING_HOURS}`);
 }
