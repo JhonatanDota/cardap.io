@@ -1,10 +1,14 @@
-import { UseFormRegisterReturn } from "react-hook-form";
+import {
+  UseFormRegisterReturn,
+  useWatch,
+  useFormContext,
+} from "react-hook-form";
 
 import { CompanyOpeningHourModel } from "../../../../models/CompanyOpeningHoursModels";
 
 import { weekDayReadableEnum } from "../../../../enums/date/week";
 
-import { timeMask } from "../../../../utils/input/masks";
+import { CiLock, CiUnlock } from "react-icons/ci";
 
 type AdminOpeningHourProps = {
   openingHour: CompanyOpeningHourModel;
@@ -20,44 +24,59 @@ type AdminOpeningHourProps = {
 export default function AdminOpeningHour(props: AdminOpeningHourProps) {
   const { openingHour, registerInit, registerEnd, errors } = props;
 
-  function handleChangeInit(e: React.ChangeEvent<HTMLInputElement>): void {
-    e.target.value = timeMask(e.target.value);
-    registerInit.onChange(e);
-  }
+  const { control } = useFormContext();
 
-  function handleChangeEnd(e: React.ChangeEvent<HTMLInputElement>): void {
-    e.target.value = timeMask(e.target.value);
-    registerEnd.onChange(e);
+  const initValue = useWatch({ control, name: registerInit.name });
+  const endValue = useWatch({ control, name: registerEnd.name });
+
+  function isDayClosed(initHour: string, endHour: string): boolean {
+    return initHour === "00:00" && endHour === "00:00";
   }
 
   return (
-    <div className="grid grid-cols-3 items-center border-2 gap-2 border-gray-200 rounded-md p-2">
-      <span className="text-base text-center font-bold col-span-2">
-        {weekDayReadableEnum[openingHour.weekDay].toUpperCase()}
-      </span>
+    <div className="grid grid-cols-1 items-center border-2 gap-2 border-gray-200 rounded-md p-2">
+      <div className="flex flex-col items-center">
+        <span className="text-base md:text-lg font-bold">
+          {weekDayReadableEnum[openingHour.weekDay].toUpperCase()}
+        </span>
+        <span
+          className={`text-sm md:text-base font-medium ${
+            isDayClosed(initValue, endValue) ? "text-red-500" : "text-green-600"
+          }`}
+        >
+          {isDayClosed(initValue, endValue) ? "Fechado" : "Aberto"}
+        </span>
+      </div>
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
-          <input
-            className="p-1.5 border-2 focus:outline-none"
-            type="text"
-            autoComplete="off"
-            {...registerInit}
-            onChange={handleChangeInit}
-          />
+          <div className="flex items-center gap-2">
+            <CiLock className="w-6 h-6 fill-green-600" />
+
+            <input
+              className="w-full font-medium p-1.5 border-2 focus:outline-none"
+              type="time"
+              autoComplete="off"
+              {...registerInit}
+            />
+          </div>
           {errors.init && (
             <span className="text-red-500 text-sm">{errors.init.message}</span>
           )}
         </div>
 
         <div className="flex flex-col">
-          <input
-            className="p-1.5 border-2 focus:outline-none"
-            type="text"
-            autoComplete="off"
-            {...registerEnd}
-            onChange={handleChangeEnd}
-          />
+          <div className="flex items-center gap-2">
+            <CiUnlock className="w-6 h-6 fill-red-500" />
+
+            <input
+              className="w-full font-medium p-1.5 border-2 focus:outline-none"
+              type="time"
+              autoComplete="off"
+              {...registerEnd}
+            />
+          </div>
+
           {errors.end && (
             <span className="text-red-500 text-sm">{errors.end.message}</span>
           )}

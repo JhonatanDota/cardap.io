@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -32,17 +32,18 @@ export default function AdminOpeningHours(
 ) {
   const { company } = props;
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<SyncOpeningHoursSchemaType>({
+  const methods = useForm<SyncOpeningHoursSchemaType>({
     resolver: zodResolver(syncOpeningHoursSchemaData),
     defaultValues: {
       openingHours: openingHoursConstants,
     },
   });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
   useEffect(() => {
     fetchOpeningHours();
@@ -64,27 +65,35 @@ export default function AdminOpeningHours(
 
   return (
     <MenuPageSectionContainer>
-      <MenuPageTitle title="Horários de Funcionamento" />
+      <MenuPageTitle title="Horários" />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3">
-        {openingHoursConstants.map((openingHour, index) => (
-          <AdminOpeningHour
-            key={openingHour.weekDay}
-            openingHour={openingHour}
-            registerInit={register(`openingHours.${index}.range.init`)}
-            registerEnd={register(`openingHours.${index}.range.end`)}
-            errors={{
-              range: errors.openingHours?.[index]?.range,
-              init: errors.openingHours?.[index]?.range?.init,
-              end: errors.openingHours?.[index]?.range?.end,
-            }}
-          />
-        ))}
+      <span className="text-sm md:text-base text-blue-700/80 font-medium">
+        Para marcar o dia como fechado, defina os horários como 00:00.
+      </span>
 
-        <div className="flex justify-end">
-          <SubmitButton />
-        </div>
-      </form>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {openingHoursConstants.map((openingHour, index) => (
+              <AdminOpeningHour
+                key={openingHour.weekDay}
+                openingHour={openingHour}
+                registerInit={register(`openingHours.${index}.range.init`)}
+                registerEnd={register(`openingHours.${index}.range.end`)}
+                errors={{
+                  range: errors.openingHours?.[index]?.range,
+                  init: errors.openingHours?.[index]?.range?.init,
+                  end: errors.openingHours?.[index]?.range?.end,
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="flex justify-end">
+            <SubmitButton />
+          </div>
+        </form>
+      </FormProvider>
     </MenuPageSectionContainer>
   );
 }
