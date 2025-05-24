@@ -15,7 +15,6 @@ type AdminOpeningHourProps = {
   registerInit: UseFormRegisterReturn;
   registerEnd: UseFormRegisterReturn;
   errors: {
-    range?: { message?: string };
     init?: { message?: string };
     end?: { message?: string };
   };
@@ -81,10 +80,6 @@ export default function AdminOpeningHour(props: AdminOpeningHourProps) {
             <span className="text-red-500 text-sm">{errors.end.message}</span>
           )}
         </div>
-
-        {errors.range && (
-          <span className="text-red-500 text-sm">{errors.range.message}</span>
-        )}
       </div>
     </div>
   );

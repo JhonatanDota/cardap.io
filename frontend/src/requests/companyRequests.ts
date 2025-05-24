@@ -59,3 +59,13 @@ export async function getCompanyOpeningHours(
 ): Promise<AxiosResponse<CompanyOpeningHourModel[]>> {
   return await requester().get(`${COMPANIES}/${id}/${OPENING_HOURS}`);
 }
+
+export async function syncCompanyOpeningHours(
+  id: number,
+  data: CompanyOpeningHourModel[]
+): Promise<AxiosResponse<CompanyOpeningHourModel[]>> {
+  console.log(data);
+  return await requester().post(`${COMPANIES}/${id}/${OPENING_HOURS}`, {
+    opening_hours: data,
+  });
+}

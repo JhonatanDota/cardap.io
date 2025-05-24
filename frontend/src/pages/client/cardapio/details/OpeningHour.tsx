@@ -23,7 +23,7 @@ export default function OpeningHour(props: OpeningHourProps) {
             </span>
 
             <span>
-              {openingHour.range.init} - {openingHour.range.end}
+              {openingHour.openHour} - {openingHour.closeHour}
             </span>
 
             <hr className="col-span-2 h-2 rounded-md mb-1 w-full" />

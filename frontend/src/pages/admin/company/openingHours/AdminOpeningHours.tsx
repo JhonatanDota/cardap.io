@@ -6,7 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CompanyModel } from "../../../../models/companyModels";
 
-import { getCompanyOpeningHours } from "../../../../requests/companyRequests";
+import {
+  getCompanyOpeningHours,
+  syncCompanyOpeningHours,
+} from "../../../../requests/companyRequests";
+
+import toast from "react-hot-toast";
 
 import { handleErrors } from "../../../../requests/handleErrors";
 
@@ -59,8 +64,13 @@ export default function AdminOpeningHours(
     }
   }
 
-  async function onSubmit(data: SyncOpeningHoursSchemaType) {
-    console.log(data);
+  async function onSubmit(data: SyncOpeningHoursSchemaType): Promise<void> {
+    try {
+      await syncCompanyOpeningHours(company.id, data.openingHours);
+      toast.success("Horários atualizados com sucesso!");
+    } catch (error) {
+      handleErrors(error);
+    }
   }
 
   return (
@@ -78,12 +88,11 @@ export default function AdminOpeningHours(
               <AdminOpeningHour
                 key={openingHour.weekDay}
                 openingHour={openingHour}
-                registerInit={register(`openingHours.${index}.range.init`)}
-                registerEnd={register(`openingHours.${index}.range.end`)}
+                registerInit={register(`openingHours.${index}.openHour`)}
+                registerEnd={register(`openingHours.${index}.closeHour`)}
                 errors={{
-                  range: errors.openingHours?.[index]?.range,
-                  init: errors.openingHours?.[index]?.range?.init,
-                  end: errors.openingHours?.[index]?.range?.end,
+                  init: errors.openingHours?.[index]?.openHour,
+                  end: errors.openingHours?.[index]?.closeHour,
                 }}
               />
             ))}
