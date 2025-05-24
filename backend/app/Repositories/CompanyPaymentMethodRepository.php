@@ -29,16 +29,14 @@ class CompanyPaymentMethodRepository
      */
     public function sync(Company $company, array $paymentMethods): Collection
     {
-        $syncedPaymentMethods = [];
-
         $company->paymentMethods()->delete();
 
-        foreach ($paymentMethods as $paymentMethod) {
-            $syncedPaymentMethods[] = [
+        $syncedPaymentMethods = array_map(function ($paymentMethod) use ($company) {
+            return [
                 'company_id' => $company->id,
                 'payment_method' => $paymentMethod,
             ];
-        }
+        }, $paymentMethods);
 
         CompanyPaymentMethod::insert($syncedPaymentMethods);
 
