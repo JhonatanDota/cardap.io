@@ -6,6 +6,7 @@ use Tests\TestCase;
 
 use App\Models\User;
 use App\Models\Company;
+use App\Models\CompanyOpeningHour;
 
 use App\Enums\Date\WeekDaysEnum;
 
@@ -231,6 +232,147 @@ class SyncCompanyOpeningHourTest extends TestCase
             'opening_hours.0.close_hour' => [
                 'The opening_hours.0.close_hour field must match the format H:i.'
             ]
+        ]);
+    }
+
+    /**
+     * Test sync company opening hour successfully.
+     *
+     * @return void
+     */
+    public function testSyncCompanyOpeningHourSuccessfully(): void
+    {
+        $this->actingAs($this->user);
+
+        $openingHours = [
+            [
+                'week_day' => WeekDaysEnum::FRIDAY->value,
+                'open_hour' => '20:00',
+                'close_hour' => '23:30',
+            ],
+            [
+                'week_day' => WeekDaysEnum::SATURDAY->value,
+                'open_hour' => '22:00',
+                'close_hour' => '23:00',
+            ],
+            [
+                'week_day' => WeekDaysEnum::SUNDAY->value,
+                'open_hour' => '15:20',
+                'close_hour' => '20:00',
+            ],
+        ];
+
+
+        $response = $this->json('POST', 'api/companies/' . $this->company->id . '/opening-hours', [
+            'opening_hours' => $openingHours
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            [
+                'id',
+                'company_id',
+                'week_day',
+                'open_hour',
+                'close_hour'
+            ]
+        ]);
+        $response->assertExactJson($this->company->openingHours->toArray());
+
+        $this->assertDatabaseHas(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::FRIDAY->value,
+            'open_hour' => '20:00',
+            'close_hour' => '23:30',
+        ]);
+
+        $this->assertDatabaseHas(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::SATURDAY->value,
+            'open_hour' => '22:00',
+            'close_hour' => '23:00',
+        ]);
+
+        $this->assertDatabaseHas(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::SUNDAY->value,
+            'open_hour' => '15:20',
+            'close_hour' => '20:00',
+        ]);
+    }
+
+    /**
+     * Test change company opening hours.
+     *
+     * @return void
+     */
+    public function testChangeCompanyOpeningHours(): void
+    {
+        $this->actingAs($this->user);
+
+        $this->company->openingHours()->createMany([
+            [
+                'week_day' => WeekDaysEnum::THURSDAY->value,
+                'open_hour' => '22:00',
+                'close_hour' => '23:00',
+            ],
+            [
+                'week_day' => WeekDaysEnum::MONDAY->value,
+                'open_hour' => '10:33',
+                'close_hour' => '17:02',
+            ],
+        ]);
+
+        $this->assertDatabaseHas(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::THURSDAY->value,
+            'open_hour' => '22:00',
+            'close_hour' => '23:00',
+        ]);
+
+        $this->assertDatabaseHas(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::MONDAY->value,
+            'open_hour' => '10:33',
+            'close_hour' => '17:02',
+        ]);
+
+        $this->company->openingHours;
+
+        $response = $this->json('POST', 'api/companies/' . $this->company->id . '/opening-hours', [
+            'opening_hours' => [
+                [
+                    'week_day' => WeekDaysEnum::TUESDAY->value,
+                    'open_hour' => '09:30',
+                    'close_hour' => '10:32',
+                ]
+            ]
+        ]);
+
+        dd($this->company->openingHours);
+
+        $response->assertOk();
+        $response->assertExactJson($this->company->openingHours->toArray());
+
+        $this->assertDatabaseMissing(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::THURSDAY->value,
+            'open_hour' => '22:00',
+            'close_hour' => '23:00',
+        ]);
+
+        $this->assertDatabaseMissing(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::MONDAY->value,
+            'open_hour' => '10:33',
+            'close_hour' => '17:02',
+        ]);
+
+        $this->assertDatabaseHas(CompanyOpeningHour::class, [
+            'company_id' => $this->company->id,
+            'week_day' => WeekDaysEnum::TUESDAY->value,
+            'open_hour' => '09:30',
+            'close_hour' => '10:32',
         ]);
     }
 }
