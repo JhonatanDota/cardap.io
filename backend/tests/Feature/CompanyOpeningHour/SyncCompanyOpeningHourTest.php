@@ -169,6 +169,39 @@ class SyncCompanyOpeningHourTest extends TestCase
     }
 
     /**
+     * Test try sync company opening hour with invalid open hour minutes.
+     *
+     * @return void
+     */
+    public function testTrySyncCompanyOpeningHourWithInvalidOpenHourMinutes(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->json('POST', 'api/companies/' . $this->company->id . '/opening-hours', [
+            'opening_hours' => [
+                [
+                    'week_day' => WeekDaysEnum::FRIDAY->value,
+                    'open_hour' => '22:60',
+                    'close_hour' => '23:00',
+                ],
+                [
+                    'week_day' => WeekDaysEnum::SATURDAY->value,
+                    'open_hour' => '22:00',
+                    'close_hour' => '23:00',
+                ],
+            ]
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonCount(1, 'errors');
+        $response->assertJsonValidationErrors([
+            'opening_hours.0.open_hour' => [
+                'The opening_hours.0.open_hour field must match the format H:i.'
+            ]
+        ]);
+    }
+
+    /**
      * Test try sync company opening hour with invalid close hour.
      *
      * @return void
