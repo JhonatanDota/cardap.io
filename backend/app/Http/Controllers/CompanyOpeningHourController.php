@@ -39,7 +39,8 @@ class CompanyOpeningHourController extends Controller
      */
     public function sync(Company $company, SyncCompanyOpeningHourRequest $request)
     {
-        dd($request->validated());
-        $this->companyOpeningHourRepository->sync($company, $request->all());
+        $openingHours = $this->companyOpeningHourRepository->sync($company, $request->validated()['opening_hours']);
+
+        return response()->json($openingHours);
     }
 }
